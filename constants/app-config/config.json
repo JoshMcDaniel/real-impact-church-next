@@ -1,0 +1,564 @@
+{
+  "website": {
+    "author": {
+      "full_name": "Josh McDaniel"
+    },
+    "home": {
+      "intro_section": {
+        "images": {
+          "intro_image": {
+            "path": "https://drive.google.com/uc?id=12wwYlx5JC3iJVW7bFzCySkc9wZTqc0jx",
+            "description": "Leading others to Christ"
+          }
+        },
+        "text": {
+          "primary": "Welcome",
+          "sub": "Ready to make a real impact for Christ?"
+        }
+      },
+      "home_summary_items": [
+        {
+          "image": {
+            "path": "https://drive.google.com/uc?id=1bWPH3ie_N52ELU91beJYrY9yYnWq15q_",
+            "description": ""
+          },
+          "info_text": {
+            "title": "Who are we?",
+            "subtitle": "Local Church | Global Vision"
+          },
+          "nav_to_route": "/about"
+        },
+        {
+          "image": {
+            "path": "https://drive.google.com/uc?id=1eFo84ubX3oisqxx_WDHsiWIopuXT-8d7",
+            "description": ""
+          },
+          "info_text": {
+            "title": "Media",
+            "subtitle": "Watch our latest sermons"
+          },
+          "nav_to_route": "/media"
+        },
+        {
+          "image": {
+            "path": "https://drive.google.com/uc?id=1WIxM0-XLxC8Tn46OBbjSPwui-pbo2Reo",
+            "description": ""
+          },
+          "info_text": {
+            "title": "Events",
+            "subtitle": "Checkout our upcoming events"
+          },
+          "nav_to_route": "/events"
+        },
+        {
+          "image": {
+            "path": "https://drive.google.com/uc?id=1CTYUbXYsnMfBpkUmQIqhm6qQZX6U8E_T",
+            "description": ""
+          },
+          "info_text": {
+            "title": "Giving",
+            "subtitle": "See how you can give back"
+          },
+          "nav_to_route": "/giving"
+        },
+        {
+          "image": {
+            "path": "https://drive.google.com/uc?id=1GSi4_Kbm0auo9mDnS122_LgvlUASl2Kg",
+            "description": ""
+          },
+          "info_text": {
+            "title": "Get connected",
+            "subtitle": "Become part of our loving community"
+          },
+          "nav_to_route": "/connect"
+        }
+      ]
+    },
+    "connect": {
+      "subtitle": "Start a connection with Real Impact Church",
+      "request_connection_path": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/connections/requestConnection",
+      "snackbar": {
+        "success_message": "Success! We'll reach out to you soon.",
+        "fail_message": "Something went wrong. Please try again."
+      }
+    },
+    "giving": {
+      "intro_section": {
+        "images": {
+          "intro_image": {
+            "path": "https://drive.google.com/uc?id=1p9IhXX-9AT5Dyaqe60sP9ic6FbV3v6kh",
+            "description": "Giving to make a Real Impact"
+          }
+        },
+        "text": {
+          "primary": "Make a Real Impact through giving",
+          "sub": "Thank you for supporting our church and its ministries!"
+        }
+      },
+      "online_giving": {
+        "description": "We use Tithe.ly as a a safe, secure option for online giving.",
+        "further_info": {
+          "text": "More information",
+          "path": "https://get.tithe.ly/online-giving-for-churches"
+        },
+        "giving_path": "https://tithe.ly/give?c=1397210"
+      }
+    },
+    "about": {
+      "intro_section": {
+        "images": {
+          "intro_image": {
+            "path": "https://drive.google.com/uc?id=1qgYyZirq42OTe3ZSPPdsnMGOCk7U6q9r",
+            "description": "Leading others to Christ"
+          }
+        },
+        "text": {
+          "primary": "Learn more about Real Impact",
+          "sub": "See how God is at work here"
+        }
+      },
+      "about_description": {
+        "descriptions": [
+          {
+            "title_text": "Who We Are",
+            "description": "We are a local church with a global vision. Our desire is to make a positive impact on this world with the love and good news of our Lord and Savior Jesus Christ. Are you looking for a church where you'll be loved, encouraged, and challenged? Do you want to hear preaching that teaches you about God's Word in a way that is easy to understand? Do you want to live a meaningful life that is pleasing to God and leaves a positive mark on society? Then look no further! Let us invite you to join us this Sunday. After all, \"We're Saving A Place Just For YOU!!!"
+          },
+          {
+            "title_text": "Our Mission",
+            "description": "We exist to know God and to make Him known"
+          },
+          {
+            "title_text": "Our Vision",
+            "description": "To glorify God by fulfilling the Great Commandment and the Great Commission"
+          }
+        ]
+      },
+      "nav_tiles": {
+        "_comment": "The tile routes must exist in the baseline.",
+        "tiles": [
+          {
+            "title": "What we believe",
+            "summary": "Learn more about what we, as a Christian church, believe.",
+            "link_text": "Learn More",
+            "route": "beliefs"
+          },
+          {
+            "title": "Meet the Staff",
+            "summary": "Meet some of our Staff that help make Real Impact Church feel like a family.",
+            "link_text": "Learn More",
+            "route": "staff"
+          }
+        ]
+      }
+    },
+    "beliefs": {
+      "doctrine": {
+        "title": "Real Impact Church Doctrine",
+        "beliefs": [
+          {
+            "title": "Trinity",
+            "text": "There is one God, eternally existent in three persons: Father, Son and Holy Spirit. These three are co-equal and co-eternal.",
+            "verses": [
+              {
+                "label": "I John 5:7",
+                "link": "https://www.bible.com/bible/111/1jn.5.7"
+              },
+              {
+                "label": "Genesis 1:26",
+                "link": "https://www.bible.com/bible/111/gen.1.26"
+              },
+              {
+                "label": "Matthew 3:16-17, 28:19",
+                "link": "https://www.bible.com/bible/111/mat.3"
+              },
+              {
+                "label": "Luke 1:35",
+                "link": "https://www.bible.com/bible/111/luk.1.35"
+              },
+              {
+                "label": "Isaiah 9:6",
+                "link": "https://www.bible.com/bible/111/isa.9.6"
+              },
+              {
+                "label": "Hebrews 3:7-11",
+                "link": "https://www.bible.com/bible/111/heb.3.7-11"
+              }
+            ]
+          },
+          {
+            "title": "God the Father",
+            "text": "We believe in God the Father, Creator of heaven and earth, perfect in holiness, infinite in wisdom and sovereign in measureless power. He concerns Himself mercifully in the affairs of men, He hears and answers prayer, and He saves from sin and death all that come to Him through Jesus Christ.",
+            "verses": [
+              {
+                "label": "Matthew 5:48",
+                "link": "https://www.bible.com/bible/111/mat.5.48"
+              },
+              {
+                "label": "Genesis 1:1",
+                "link": "https://www.bible.com/bible/111/gen.1.1"
+              },
+              {
+                "label": "Hebrews 11:3",
+                "link": "https://www.bible.com/bible/111/heb.11.3"
+              },
+              {
+                "label": "Nehemiah 9:6",
+                "link": "https://www.bible.com/bible/111/neh.9.6"
+              },
+              {
+                "label": "Hebrews 1:2-3",
+                "link": "https://www.bible.com/bible/111/heb.1.2-3"
+              },
+              {
+                "label": "Psalm 103:19",
+                "link": "https://www.bible.com/bible/111/psa.103.19"
+              },
+              {
+                "label": "Ephesians 1:11",
+                "link": "https://www.bible.com/bible/111/eph.1.11"
+              },
+              {
+                "label": "1 Kings 8:27",
+                "link": "https://www.bible.com/bible/111/1ki.8.27"
+              },
+              {
+                "label": "Psalm 90:2",
+                "link": "https://www.bible.com/bible/111/psa.90.2"
+              }
+            ]
+          },
+          {
+            "title": "Jesus Christ",
+            "text": "Jesus Christ is God the Son, the second person of the Trinity. On earth, Jesus was fully God and fully man. In every way He is equal in nature, character and power with God the Father. He was born of a virgin, lived a sinless life, performed miracles, died on the cross for lost humanity and thus, atoned for our sins through the shedding of His blood. He rose from the dead on the third day according to the Scriptures, ascended to the right hand of the Father, currently rules from Heaven’s throne and will return again to earth in power and glory.",
+            "verses": [
+              {
+                "label": "John 1:1,14, 20:28",
+                "link": "https://www.bible.com/bible/111/jhn.1"
+              },
+              {
+                "label": "I Timothy 3:16",
+                "link": "https://www.bible.com/bible/111/1ti.3.16"
+              },
+              {
+                "label": "Isaiah 9:6",
+                "link": "https://www.bible.com/bible/111/isa.9.6"
+              },
+              {
+                "label": "Philippians 2:5-6",
+                "link": "https://www.bible.com/bible/111/php.2.5-6"
+              },
+              {
+                "label": "I Timothy 2:5",
+                "link": "https://www.bible.com/bible/111/1ti.2.5"
+              }
+            ]
+          },
+          {
+            "title": "The Holy Spirit",
+            "text": "We believe in the Holy Spirit, who came forth from God to convict the world of sin, to convince the world of righteousness, of judgment, and to regenerate, sanctify, and secure all who believe in Jesus Christ. He supernaturally empowers all believers for ministry. He works in all believers, producing spiritual fruit that is consistent with the character of God. He gives gifts to men in order to advance the Gospel of Jesus Christ, strengthen the church and open the eyes of unbelievers to the power of the Gospel of Kingdom.",
+            "verses": [
+              {
+                "label": "John 15:26",
+                "link": "https://www.bible.com/bible/111/jhn.15.26"
+              },
+              {
+                "label": "John 16:8-11",
+                "link": "https://www.bible.com/bible/111/jhn.16.8-11"
+              },
+              {
+                "label": "Romans 6:3-6",
+                "link": "https://www.bible.com/bible/111/rom.6.3-6"
+              },
+              {
+                "label": "1 Corinthians 12:13",
+                "link": "https://www.bible.com/bible/111/1co.12.13"
+              },
+              {
+                "label": "2 Thessalonians 2:13",
+                "link": "https://www.bible.com/bible/111/2th.2.13"
+              },
+              {
+                "label": "1 Peter 1:1-3",
+                "link": "https://www.bible.com/bible/111/1pe.1.1-3"
+              }
+            ]
+          },
+          {
+            "title": "Scripture",
+            "text": "We believe that the Scriptures of the Old and New Testament are inspired by God and without error in the original writings, and that they are of supreme and final authority in faith and conduct. We are gladly bound to the authority of the Scriptures and evaluate all our beliefs and practices (not regarding or holding to new trends or denominational/cultural traditions) against the truth of God’s Word.",
+            "verses": [
+              {
+                "label": "II Timothy 3:16",
+                "link": "https://www.bible.com/bible/111/2ti.3.16"
+              },
+              {
+                "label": "II Peter 1:20-21",
+                "link": "https://www.bible.com/bible/111/2pe.1.20-21"
+              },
+              {
+                "label": "Proverbs 30:5",
+                "link": "https://www.bible.com/bible/111/pro.30.5"
+              },
+              {
+                "label": "Romans 16:25-26",
+                "link": "https://www.bible.com/bible/111/rom.16.25-26"
+              }
+            ]
+          },
+          {
+            "title": "Jesus’ Blood",
+            "text": "The Blood that Jesus Christ shed on the Cross of Calvary was the perfect payment for sin and is perfectly sufficient to cleanse mankind of all sin. Jesus allowed Himself to be punished for both our sinfulness and our sins, enabling all those who believe to be free from the penalty of sin, which is death.",
+            "verses": [
+              {
+                "label": "I John 1:7",
+                "link": "https://www.bible.com/bible/111/1jn.1.7"
+              },
+              {
+                "label": "Revelation 1:5, 5:9",
+                "link": "https://www.bible.com/bible/111/rev.1"
+              },
+              {
+                "label": "Colossians 1:20",
+                "link": "https://www.bible.com/bible/111/col.1.20"
+              },
+              {
+                "label": "Romans 3:10-12, 23, 5:9",
+                "link": "https://www.bible.com/bible/111/rom.3"
+              },
+              {
+                "label": "John 1:29",
+                "link": "https://www.bible.com/bible/111/jhn.1.29"
+              }
+            ]
+          },
+          {
+            "title": "Resurrection",
+            "text": "Jesus Christ was physically resurrected from the dead in a glorified body three days after His death on the cross. In addition, both the saved and the lost will be resurrected; they that are saved to the resurrection of life and they that are lost to the resurrection of eternal damnation.",
+            "verses": [
+              {
+                "label": "Luke 24:16, 36, 39",
+                "link": "https://www.bible.com/bible/111/luk.24"
+              },
+              {
+                "label": "John 2:19-21, 20:26-28, 21:4",
+                "link": "https://www.bible.com/bible/111/jhn.2"
+              },
+              {
+                "label": "Acts 24:15",
+                "link": "https://www.bible.com/bible/111/act.24.15"
+              },
+              {
+                "label": "I Corinthians 15:42, 44",
+                "link": "https://www.bible.com/bible/111/1co.15.42-44"
+              },
+              {
+                "label": "Philippians 1:21-23, 3:21",
+                "link": "https://www.bible.com/bible/111/php.1"
+              }
+            ]
+          },
+          {
+            "title": "Redemption/Salvation",
+            "text": "Man was originally created good and upright in perfect standing with God the Creator. By voluntary transgression he fell in the Garden of Eden; all descendants of Adam inherit his sin nature and the only hope of redemption is in Jesus Christ, the Son of God – specifically His death, burial, and resurrection. Salvation is a gift from God. When placing one’s faith in Jesus Christ (plus nothing, minus nothing), one is justified before God upon the merits of Jesus Christ. Salvation is by grace through faith via repentance toward God.",
+            "verses": [
+              {
+                "label": "Gen. 1:26-31, 3:1-7",
+                "link": "https://www.bible.com/bible/111/gen.1"
+              },
+              {
+                "label": "Romans 5:12-21",
+                "link": "https://www.bible.com/bible/111/rom.5.12-21"
+              },
+              {
+                "label": "Acts 17:30",
+                "link": "https://www.bible.com/bible/111/act.17.30"
+              }
+            ]
+          },
+          {
+            "title": "Heaven",
+            "text": "Heaven is the eternal dwelling place for all believers in Jesus Christ. Additionally, Heaven is not just a place that believers enter when they die; it is the character of the Kingdom of God that comes into the earth through the proclamation and demonstration of the Gospel of the Kingdom.",
+            "verses": [
+              {
+                "label": "Matthew 5:3, 12, 20, 6:20, 19:21, 25:34",
+                "link": "https://www.bible.com/bible/111/mat.5"
+              },
+              {
+                "label": "John 17:24",
+                "link": "https://www.bible.com/bible/111/jhn.17.24"
+              },
+              {
+                "label": "II Corinthians 5:1",
+                "link": "https://www.bible.com/bible/111/2co.5.1"
+              },
+              {
+                "label": "Hebrews 11:16",
+                "link": "https://www.bible.com/bible/111/heb.11.16"
+              },
+              {
+                "label": "I Peter 1:4",
+                "link": "https://www.bible.com/bible/111/1pe.1.4"
+              }
+            ]
+          },
+          {
+            "title": "Hell",
+            "text": "After living one life on earth, unbelievers will be judged by God and sent to Hell where they will be eternally tormented with the Devil and the Fallen Angels.",
+            "verses": [
+              {
+                "label": "Matthew 25:41",
+                "link": "https://www.bible.com/bible/111/mat.25.41"
+              },
+              {
+                "label": "Mark 9:43-48",
+                "link": "https://www.bible.com/bible/111/mrk.9.43-48"
+              },
+              {
+                "label": "Hebrews 9:27",
+                "link": "https://www.bible.com/bible/111/heb.9.27"
+              },
+              {
+                "label": "Revelation 14:9-11, 20:12-15, 21:8",
+                "link": "https://www.bible.com/bible/111/rev.14"
+              }
+            ]
+          },
+          {
+            "title": "The Church",
+            "text": "The church is the Body of Christ, the habitation of God through the Spirit, with divine appointments for the fulfillment of Jesus’ great commission. Every person who is born of the Spirit is an integral part of the Church as a member of the body of believers. There is a spiritual unity of all believers in our Lord Jesus Christ. The local church is a visible expression of the invisible church. To belong to the local church is part of the design of God for all believers.",
+            "verses": [
+              {
+                "label": "Ephesians 1:22, 2:19-22",
+                "link": "https://www.bible.com/bible/111/eph.1"
+              },
+              {
+                "label": "Hebrews 12:23",
+                "link": "https://www.bible.com/bible/111/heb.12.23"
+              },
+              {
+                "label": "John 17:11, 20-23",
+                "link": "https://www.bible.com/bible/111/jhn.17"
+              },
+              {
+                "label": "Hebrews 10:24-25",
+                "link": "https://www.bible.com/bible/111/heb.10.24-25"
+              }
+            ]
+          },
+          {
+            "title": "The Second Coming",
+            "text": "We believe in the glorious hope of the visible and bodily return of Jesus Christ.",
+            "verses": [
+              {
+                "label": "Matthew 24:30, 26:63-64",
+                "link": "https://www.bible.com/bible/111/mat.24"
+              },
+              {
+                "label": "Acts 1:9-11",
+                "link": "https://www.bible.com/bible/111/act.1.9-11"
+              },
+              {
+                "label": "I Thessalonians 4:15-17",
+                "link": "https://www.bible.com/bible/111/1th.4.15-17"
+              },
+              {
+                "label": "II Thessalonians 1:7-8",
+                "link": "https://www.bible.com/bible/111/2th.1.7-8"
+              },
+              {
+                "label": "Revelation 1:7",
+                "link": "https://www.bible.com/bible/111/rev.1.7"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "staff": {
+      "header_text": "Real Impact Staff",
+      "routes": {
+        "get_all_staff": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/personnel/staff/getAllStaff"
+      }
+    },
+    "events": {
+      "header_text": "Events",
+      "routes": {
+        "get_all_events": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/events/getAllEvents",
+        "get_event": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/events/getEvent"
+      }
+    },
+    "media": {
+      "media_page": {
+        "youtube": {
+          "most_recent": {
+            "number_of_videos": 5
+          },
+          "most_popular": {
+            "number_of_videos": 5
+          }
+        }
+      },
+      "social_media": [
+        {
+          "platform": "FACEBOOK",
+          "path": "https://www.facebook.com/SeminoleSpringsBaptistChurch/"
+        },
+        {
+          "platform": "INSTAGRAM",
+          "path": "https://www.instagram.com/impactyouth412/"
+        },
+        {
+          "platform": "YOUTUBE",
+          "path": "https://www.youtube.com/channel/UC-2UUaVukuu7FgXmOH-jdmg"
+        }
+      ]
+    },
+    "footer": {
+      "images": {
+        "logo": {
+          "name": "real_impact_transparent_logo.png",
+          "description": "Real Impact title and logo"
+        }
+      }
+    }
+  },
+  "organization": {
+    "full_name": "Real Impact Church",
+    "registration_year": "2022",
+    "contact": {
+      "phone": {
+        "primary": ""
+      },
+      "email": {
+        "primary": "RealImpactChurch@gmail.com"
+      },
+      "full_address": "35025 Huff Rd. Eustis, FL 32736",
+      "street": "35025 Huff Rd.",
+      "city": "Eustis",
+      "state": "FL",
+      "zip_code": "32736",
+      "google_maps_link": "https://goo.gl/maps/EThnrz52em1wM2wm9"
+    },
+    "social_media": {
+      "youtube": {
+        "api_url": "https://www.googleapis.com/youtube/v3/search?key=",
+        "channel_id": "UC-2UUaVukuu7FgXmOH-jdmg"
+      }
+    },
+    "logos": {
+      "title_logo": {
+        "path": "https://drive.google.com/uc?id=1ZbBhSk2OE5QnetAmJTUy_mR1ZTjIpXrR",
+        "description": "Real Impact title and logo"
+      },
+      "simple_logo": {
+        "path": "https://drive.google.com/uc?id=1iMpTO-Y23RifoK_9rxGMls6uPu4t2MVU",
+        "description": "Real Impact logo"
+      }
+    },
+    "schedule": {
+      "services": {
+        "route": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/services"
+      }
+    }
+  }
+}
