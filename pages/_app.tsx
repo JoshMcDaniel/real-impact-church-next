@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '../constants/app-config/Theme';
 import { Fragment } from 'react';
-import { Footer } from '../components/footer/Footer';
+import { Footer } from '../components/Footer/Footer';
 import ScrollToTop from '../components/shared/ScrollToTop';
 import ResponsiveAppBar from '../components/AppBar/ResponsiveAppBar';
 
