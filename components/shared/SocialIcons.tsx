@@ -1,7 +1,7 @@
 import { IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import * as React from 'react';
-import { socialMediaPlatformIconMap } from '../../constants/social-media-icons-map';
+import { socialMediaPlatformIconMap } from '../../constants/icons/social-media-icons-map';
 
 export type SocialPlatform = {
   platform: string;

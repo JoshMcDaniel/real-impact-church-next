@@ -13,7 +13,7 @@ export const Giving: NextPage = () => {
 
   return (
     <Box>
-      <DynamicHead description="Giving page" />
+      <DynamicHead title={'Giving'} description="Giving page" />
 
       <SectionIntroImage
         imagePath={introImage?.path}

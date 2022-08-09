@@ -9,7 +9,9 @@ type Props = {
 
 const DynamicHead = (props: Props) => {
   const organizationConfig = useOrganizationConfig();
-  const title = props.title || organizationConfig.full_name;
+  const title = `${props.title ? `${props.title} | ` : ''}${
+    organizationConfig.full_name
+  }`;
   return (
     <Head>
       <title>{title}</title>
