@@ -23,6 +23,12 @@ a {
   height: 100% !important;
 }
 
+.center-container {
+  display: grid;
+  max-width: 1140px;
+  margin: auto;
+}
+
 /* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
