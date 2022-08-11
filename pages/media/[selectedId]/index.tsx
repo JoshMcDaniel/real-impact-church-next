@@ -37,7 +37,7 @@ const SelectedMedia = () => {
   const watchVideoOnYoutubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
   useEffect(() => {
-    if (!videoInfo) {
+    if (!!videoId && !videoInfo) {
       getVideoInfo();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
