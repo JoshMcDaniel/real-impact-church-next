@@ -29,6 +29,20 @@ a {
   margin: auto;
 }
 
+.grow-on-hover-medium:hover {
+  transition: transform 0.25s ease-in-out;
+  transform: scale3d(1.05, 1.05, 1);
+}
+
+.grow-on-hover-small:hover {
+  transition: transform 0.25s ease-in-out;
+  transform: scale3d(1.01, 1.01, 1);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

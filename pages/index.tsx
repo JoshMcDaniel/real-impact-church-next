@@ -17,7 +17,6 @@ import { ScheduleSummary } from '../components/Home/ScheduleSummary';
 import AddressBlock from '../components/shared/AddressBlock';
 import SectionIntroImage from '../components/shared/SectionIntroImage';
 import { useHomeConfig } from '../constants/app-config/app-config-hooks';
-import styles from '../styles/Home.module.css';
 
 type HomeSummaryItem = {
   image: {
