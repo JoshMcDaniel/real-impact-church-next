@@ -1,11 +1,12 @@
 import {
+  Avatar,
   Box,
   Skeleton,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import AvatarWithFallbacks from './AvatarWithFallbacks';
+import { StaffPerson } from '../../pages/staff';
 
 const bioBlockConfig = {
   avatar: {
@@ -51,13 +52,7 @@ export const BioBlockSkeleton = () => {
 };
 
 type BioBlocProps = {
-  person: {
-    firstName: string;
-    lastName: string;
-    imgURL: string;
-    positionTitle: string;
-    description: string;
-  };
+  person: StaffPerson;
 };
 
 export const BioBlock = (props: BioBlocProps) => {
@@ -76,7 +71,18 @@ export const BioBlock = (props: BioBlocProps) => {
       gridTemplateRows={isMediumView ? '1fr' : '300px 1fr'}
       height={isMediumView ? '300px' : 'auto'}
     >
-      <AvatarWithFallbacks {...avatarProps} />
+      <Avatar
+        alt={avatarProps.alt}
+        src={avatarProps.src}
+        sx={{
+          display: 'grid',
+          justifySelf: avatarProps.justifySelf,
+          maxHeight: avatarProps.maxHeight,
+          maxWidth: avatarProps.maxWidth,
+          width: '100%',
+          height: '100%',
+        }}
+      />
       <Box padding={isMediumView ? '2rem' : '2rem 1rem'}>
         <Typography
           variant="h5"

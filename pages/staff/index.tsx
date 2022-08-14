@@ -1,29 +1,28 @@
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import axios from 'axios';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
 import { useStaffConfig } from '../../constants/app-config/app-config-hooks';
 import BioBlock, { BioBlockSkeleton } from '../../components/shared/BioBlock';
+import appConfig from '../../constants/app-config/config.json';
 
-export const Staff = () => {
+export type StaffPerson = {
+  firstName: string;
+  lastName: string;
+  imgURL: string;
+  positionTitle: string;
+  description: string;
+};
+
+type StaffProps = {
+  staff: StaffPerson[];
+};
+
+export const Staff = (props: StaffProps) => {
+  const { staff } = props;
   const placeholders = new Array(2).fill(null);
-  const [staff, setStaff] = useState([]);
-
-  const { routes, header_text } = useStaffConfig();
+  const { header_text } = useStaffConfig();
   const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
-
-  useEffect(() => {
-    if (!staff.length) {
-      getAllStaff();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const getAllStaff = () => {
-    axios.get(routes.get_all_staff).then((res) => {
-      setStaff(res.data);
-    });
-  };
 
   return (
     <Fragment>
@@ -46,5 +45,21 @@ export const Staff = () => {
     </Fragment>
   );
 };
+
+// This function gets called at build time on server-side.
+export async function getStaticProps() {
+  const res = await axios.get(appConfig.website.staff.routes.get_all_staff);
+  const staff = res.data.staff;
+
+  return {
+    props: {
+      staff,
+    },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every 1 hour
+    revalidate: 3600, // In seconds
+  };
+}
 
 export default Staff;

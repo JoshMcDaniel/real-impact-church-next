@@ -9,30 +9,24 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import type { NextPage } from 'next';
+import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import DynamicHead from '../components/DynamicHead/DynamicHead';
 import { ScheduleSummary } from '../components/Home/ScheduleSummary';
+import { Service } from '../components/Home/ScheduleSummaryService';
 import AddressBlock from '../components/shared/AddressBlock';
 import SectionIntroImage from '../components/shared/SectionIntroImage';
 import { useHomeConfig } from '../constants/app-config/app-config-hooks';
+import appConfig from '../constants/app-config/config.json';
 
-type HomeSummaryItem = {
-  image: {
-    path: string;
-    description: string;
-  };
-  info_text: {
-    title: string;
-    subtitle: string;
-  };
-  nav_to_route: string;
+type HomeProps = {
+  services: Service[];
 };
 
-const Home: NextPage = () => {
+const Home = (props: HomeProps) => {
   const homeConfig = useHomeConfig();
-  const items: HomeSummaryItem[] = homeConfig.home_summary_items;
+  const items = homeConfig.home_summary_items;
   const primaryText = homeConfig.intro_section.text.primary;
   const subText = homeConfig.intro_section.text.sub;
   const imagePath = homeConfig.intro_section.images.intro_image.path;
@@ -62,7 +56,7 @@ const Home: NextPage = () => {
             <Paper>
               <AddressBlock />
             </Paper>
-            <ScheduleSummary />
+            <ScheduleSummary services={props.services} />
           </Stack>
           <ImageList
             cols={isMediumView ? 2 : 1}
@@ -100,5 +94,21 @@ const Home: NextPage = () => {
     </Box>
   );
 };
+
+// This function gets called at build time on server-side.
+export async function getStaticProps() {
+  const res = await axios.get(appConfig.organization.schedule.services.route);
+  const services = res.data.services;
+
+  return {
+    props: {
+      services,
+    },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every 1 hour
+    revalidate: 3600, // In seconds
+  };
+}
 
 export default Home;

@@ -1,28 +1,10 @@
 import { Divider, Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react';
-import axios from 'axios';
-import { useOrganizationConfig } from '../../constants/app-config/app-config-hooks';
 import ScheduleSummaryService, { Service } from './ScheduleSummaryService';
 
-export const ScheduleSummary = () => {
-  const [services, setServices] = React.useState<Service[]>([]);
-  const schedule = useOrganizationConfig().schedule;
-
-  useEffect(() => {
-    if (!services.length) {
-      getAllServices();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const getAllServices = () => {
-    axios.get(schedule.services.route).then((res) => {
-      setServices(res.data);
-    });
-  };
-
+export const ScheduleSummary = (props: { services: Service[] }) => {
+  const { services } = props;
   return (
     <Paper
       component="section"
