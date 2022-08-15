@@ -1,4 +1,3 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,15 +16,17 @@ import PermMediaIcon from '@mui/icons-material/PermMedia';
 import EventIcon from '@mui/icons-material/Event';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
-import SvgIcon from '@mui/icons-material/Event';
 import { Close } from '@mui/icons-material';
 import { TitleLogoImage } from '../shared/TitleLogoImage';
 import { useOrganizationConfig } from '../../constants/app-config/app-config-hooks';
 import { HideOnScroll } from '../shared/HideOnScroll';
 import AvatarWithFallbacks from '../shared/AvatarWithFallbacks';
+import { useState } from 'react';
 
 const ResponsiveAppBar = () => {
   const pages = [
+    // Icons are not used at this time.
+    // Use "SvgIcon" for the icons.
     { displayText: 'Home', route: '/', icon: HomeIcon },
     { displayText: 'About Us', route: '/about', icon: HelpCenterIcon },
     { displayText: 'Media', route: '/media', icon: PermMediaIcon },
@@ -38,7 +39,7 @@ const ResponsiveAppBar = () => {
     },
   ];
 
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const logo = useOrganizationConfig().logos.simple_logo;
   const location = useRouter();
 
@@ -73,6 +74,13 @@ const ResponsiveAppBar = () => {
                 anchor={'right'}
                 open={menuOpen}
                 onClose={() => setMenuOpen(false)}
+                variant="temporary"
+                ModalProps={{
+                  keepMounted: true,
+                }}
+                PaperProps={{
+                  sx: { width: '100%' },
+                }}
               >
                 <AppBar
                   position="relative"
@@ -109,25 +117,18 @@ const ResponsiveAppBar = () => {
                 {pages.map((page) => (
                   <Link href={page.route} key={page.displayText}>
                     <MenuItem
-                      // key={page.displayText}
-                      // component={Link}
-                      // to={page.route}
                       onClick={() => setMenuOpen(false)}
                       sx={{
                         display: 'grid',
-                        gap: '1rem',
-                        gridTemplateColumns: 'auto 1fr',
-                        justifyItems: 'left',
+                        justifyContent: 'center',
+                        paddingTop: '0.75rem',
+                        paddingBottom: '0.75rem',
+                        textAlign: 'center',
                       }}
                     >
-                      <SvgIcon
-                        component={page.icon}
-                        color={
-                          isActiveRoute(page.route) ? 'secondary' : 'primary'
-                        }
-                      />
                       <Typography
                         textAlign="center"
+                        fontSize={24}
                         color={
                           isActiveRoute(page.route) ? 'secondary' : 'primary'
                         }
@@ -150,10 +151,7 @@ const ResponsiveAppBar = () => {
               {pages.map((page) => (
                 <Link href={page.route} key={page.displayText}>
                   <Button
-                    // key={page.displayText}
                     onClick={() => setMenuOpen(false)}
-                    // component={Link}
-                    // to={page.route}
                     sx={{ my: 2, color: 'white', display: 'block' }}
                   >
                     {page.displayText}
