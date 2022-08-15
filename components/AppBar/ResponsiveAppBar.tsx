@@ -90,7 +90,7 @@ const ResponsiveAppBar = () => {
                     justifyItems: 'space-between',
                     alignItems: 'center',
                     padding: '0 16px',
-                    marginBottom: '8px',
+                    marginBottom: '24px',
                   }}
                 >
                   <AvatarWithFallbacks
