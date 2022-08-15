@@ -10,6 +10,7 @@ import {
   useTheme,
 } from '@mui/material';
 import axios from 'axios';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import DynamicHead from '../components/DynamicHead/DynamicHead';
@@ -46,13 +47,13 @@ const Home = (props: HomeProps) => {
           sx={{
             display: 'grid',
             gridTemplateColumns: isMediumView ? '1fr 2fr' : '1fr',
-            paddingTop: '24px',
+            paddingTop: '32px',
             paddingBottom: '24px',
             gap: '2rem',
             justifyItems: 'center',
           }}
         >
-          <Stack component="main" spacing={1} maxWidth="400px">
+          <Stack component="main" spacing={4} maxWidth="400px">
             <Paper>
               <AddressBlock />
             </Paper>
@@ -96,7 +97,7 @@ const Home = (props: HomeProps) => {
 };
 
 // This function gets called at build time on server-side.
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await axios.get(appConfig.organization.schedule.services.route);
   const services = res.data.services;
 
@@ -109,6 +110,6 @@ export async function getStaticProps() {
     // - At most once every 1 hour
     revalidate: 3600, // In seconds
   };
-}
+};
 
 export default Home;
