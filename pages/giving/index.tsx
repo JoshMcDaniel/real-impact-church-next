@@ -7,13 +7,13 @@ import SectionIntroImage from '../../components/shared/SectionIntroImage';
 import { useGivingConfig } from '../../constants/app-config/app-config-hooks';
 
 export const Giving: NextPage = () => {
-  const { intro_section, online_giving } = useGivingConfig();
+  const { intro_section, online_giving, header } = useGivingConfig();
   const introImage = intro_section.images.intro_image;
   const introText = intro_section.text;
 
   return (
     <Box>
-      <DynamicHead title={'Giving'} description="Giving page" />
+      <DynamicHead title={header.title} description={header.description} />
 
       <SectionIntroImage
         imagePath={introImage?.path}

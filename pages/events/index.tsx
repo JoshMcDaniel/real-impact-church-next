@@ -20,7 +20,10 @@ export const Events = (props: { events: EventType[] }) => {
 
   return (
     <Fragment>
-      <DynamicHead title={'Events'} description="Events page" />
+      <DynamicHead
+        title={eventsConfig.header.title}
+        description={eventsConfig.header.description}
+      />
       <Box
         component="main"
         display="grid"

@@ -58,7 +58,10 @@ const SelectedMedia = () => {
 
   return (
     <Fragment>
-      <DynamicHead title={'Watch'} description="Selected media page" />
+      <DynamicHead
+        title={videoInfo?.title || 'Watch'}
+        description={videoInfo?.description || 'Enjoy the media!'}
+      />
       <Box display="grid" gap="2rem">
         {videoId && <YoutubeEmbed videoId={videoId as string} />}
         <Box display="grid" padding="0 1rem 2rem 1rem">

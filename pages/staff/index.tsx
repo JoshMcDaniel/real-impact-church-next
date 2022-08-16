@@ -21,12 +21,12 @@ type StaffProps = {
 export const Staff = (props: StaffProps) => {
   const { staff } = props;
   const placeholders = new Array(2).fill(null);
-  const { header_text } = useStaffConfig();
+  const { header_text, header } = useStaffConfig();
   const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
 
   return (
     <Fragment>
-      <DynamicHead title={'Staff'} description="Staff page" />
+      <DynamicHead title={header.title} description={header.description} />
       <Box
         component="main"
         className="center-container"

@@ -35,7 +35,10 @@ const Home = (props: HomeProps) => {
 
   return (
     <Box>
-      <DynamicHead description="Home page" />
+      <DynamicHead
+        title={homeConfig.header.title}
+        description={homeConfig.header.description}
+      />
 
       <Box>
         <SectionIntroImage

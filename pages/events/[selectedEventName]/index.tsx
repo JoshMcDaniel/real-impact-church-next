@@ -34,7 +34,7 @@ const SelectedEvent = (props: { event: EventType }) => {
 
   return (
     <Fragment>
-      <DynamicHead title={'Event'} description="Selected Event page" />
+      <DynamicHead title={event.name} description={event.description} />
       <Box component="main" className="center-container">
         <Box>
           <Card raised>

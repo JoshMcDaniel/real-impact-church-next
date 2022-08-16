@@ -19,7 +19,8 @@ import LoadingIndication from '../../components/shared/LoadingIndication';
 import { useConnectConfig } from '../../constants/app-config/app-config-hooks';
 
 export const Connect = () => {
-  const { snackbar, request_connection_path, subtitle } = useConnectConfig();
+  const { snackbar, request_connection_path, subtitle, header } =
+    useConnectConfig();
 
   const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
 
@@ -59,7 +60,7 @@ export const Connect = () => {
 
   return (
     <Fragment>
-      <DynamicHead title={'Connect'} description="Giving page" />
+      <DynamicHead title={header.title} description={header.description} />
       <Box display="grid" gap="1rem" padding={isMediumView ? '2rem' : '1rem'}>
         <Box>
           <Typography variant="h4">Connect</Typography>

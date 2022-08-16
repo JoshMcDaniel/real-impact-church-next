@@ -15,17 +15,16 @@ export type BeliefsDoctrineContainer = {
   beliefs: DoctrineBelief[];
 };
 
-export type BeliefsContainer = {
-  doctrine: BeliefsDoctrineContainer;
-};
-
 export const Beliefs = () => {
-  const beliefsConfig: BeliefsContainer = useBeliefsConfig();
+  const beliefsConfig = useBeliefsConfig();
   const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
 
   return (
     <Fragment>
-      <DynamicHead title={'Beliefs'} description="Beliefs page" />
+      <DynamicHead
+        title={beliefsConfig.header.title}
+        description={beliefsConfig.header.description}
+      />
       <Box
         display="grid"
         gap="2rem"

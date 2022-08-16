@@ -21,7 +21,8 @@ import {
 
 export const Media: NextPage = () => {
   const { api_url, channel_id } = useOrganizationConfig().social_media.youtube;
-  const { most_recent, most_popular } = useMediaConfig().media_page.youtube;
+  const mediaConfig = useMediaConfig();
+  const { most_recent, most_popular } = mediaConfig.media_page.youtube;
 
   const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
   const activeRoute = useRouter().pathname;
@@ -79,7 +80,10 @@ export const Media: NextPage = () => {
 
   return (
     <Fragment>
-      <DynamicHead title={'Media'} description="Media page" />
+      <DynamicHead
+        title={mediaConfig.media_page.header.title}
+        description={mediaConfig.media_page.header.description}
+      />
       <Box display="grid" gap="1rem" padding={isMediumView ? '2rem' : '1rem'}>
         <Box>
           <Typography variant="h4">Sermons</Typography>

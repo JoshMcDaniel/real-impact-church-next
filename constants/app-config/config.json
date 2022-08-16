@@ -4,6 +4,10 @@
       "full_name": "Josh McDaniel"
     },
     "home": {
+      "header": {
+        "title": "Welcome",
+        "description": "Welcome to Real Impact Church - a loving Christian community with one goal: To know God and to make Him known. Come and see how you too can make a Real Impact for Christ!"
+      },
       "intro_section": {
         "images": {
           "intro_image": {
@@ -75,6 +79,10 @@
       ]
     },
     "connect": {
+      "header": {
+        "title": "Connect",
+        "description": "Connect with our loving Christian community here at Real Impact Church and see how you too can make a Real Impact for Christ!"
+      },
       "subtitle": "Start a connection with Real Impact Church",
       "request_connection_path": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/connections/requestConnection",
       "snackbar": {
@@ -83,6 +91,10 @@
       }
     },
     "giving": {
+      "header": {
+        "title": "Giving",
+        "description": "Make a Real Impact through giving. Thank you for supporting our church and its ministries!"
+      },
       "intro_section": {
         "images": {
           "intro_image": {
@@ -105,6 +117,10 @@
       }
     },
     "about": {
+      "header": {
+        "title": "About",
+        "description": "We are a local Christian community, based out of Eustis Florida, with a global vision. Come and see how you too can make a Real Impact for Christ!"
+      },
       "intro_section": {
         "images": {
           "intro_image": {
@@ -152,6 +168,10 @@
       }
     },
     "beliefs": {
+      "header": {
+        "title": "Beliefs",
+        "description": "See what we believe about our Lord Jesus Christ, and why."
+      },
       "doctrine": {
         "title": "Real Impact Church Doctrine",
         "beliefs": [
@@ -475,12 +495,20 @@
       }
     },
     "staff": {
+      "header": {
+        "title": "Staff",
+        "description": "Meet our loving staff at Real Impact Church."
+      },
       "header_text": "Real Impact Staff",
       "routes": {
         "get_all_staff": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/personnel/staff/getAllStaff"
       }
     },
     "events": {
+      "header": {
+        "title": "Events",
+        "description": "See the events we have planned at Real Impact Church."
+      },
       "header_text": "Events",
       "routes": {
         "get_all_events": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/events/getAllEvents",
@@ -489,6 +517,10 @@
     },
     "media": {
       "media_page": {
+        "header": {
+          "title": "Media",
+          "description": "See what Real Impact Church is all about. Checkout our latest and most popular sermons."
+        },
         "youtube": {
           "most_recent": {
             "number_of_videos": 5

@@ -21,7 +21,10 @@ export const About = () => {
 
   return (
     <Fragment>
-      <DynamicHead title={'About'} description="About us page" />
+      <DynamicHead
+        title={aboutConfig.header.title}
+        description={aboutConfig.header.description}
+      />
       <Box component="section">
         <SectionIntroImage
           imagePath={imagePath}
