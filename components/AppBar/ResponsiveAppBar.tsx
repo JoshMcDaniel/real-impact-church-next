@@ -52,7 +52,7 @@ const ResponsiveAppBar = () => {
       <AppBar position="sticky">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <TitleLogoImage height="25px" />
+            <TitleLogoImage height={25} />
             <Box
               sx={{
                 flexGrow: 1,

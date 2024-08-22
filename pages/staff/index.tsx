@@ -1,17 +1,18 @@
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
-import axios from 'axios';
 import { Fragment } from 'react';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
 import { useStaffConfig } from '../../constants/app-config/app-config-hooks';
 import BioBlock, { BioBlockSkeleton } from '../../components/shared/BioBlock';
-import appConfig from '../../constants/app-config/config.json';
+import { sanityFetch } from '../../src/sanity/lib/client';
+import { groq } from 'next-sanity';
+import { ArraySchemaType, BlockSchemaType, Image } from 'sanity';
 
 export type StaffPerson = {
-  firstName: string;
-  lastName: string;
-  imgURL: string;
-  positionTitle: string;
-  description: string;
+  name: string;
+  image: Image;
+  position: string;
+  description: ArraySchemaType<BlockSchemaType>;
+  displayOrder: number;
 };
 
 type StaffProps = {
@@ -48,8 +49,21 @@ export const Staff = (props: StaffProps) => {
 
 // This function gets called at build time on server-side.
 export async function getStaticProps() {
-  const res = await axios.get(appConfig.website.staff.routes.get_all_staff);
-  const staff = res.data.staff;
+  // const res = await axios.get(appConfig.website.staff.routes.get_all_staff);
+  // const staff = res.data.staff;
+  const staff: StaffPerson[] = await sanityFetch({
+    query: groq`*[_type == "staff"] {
+    _id,
+    name,
+    position,
+    image,
+    description,
+    displayOrder
+    }`,
+    tags: ['staff'],
+  });
+
+  staff.sort((a, b) => a.displayOrder - b.displayOrder);
 
   return {
     props: {

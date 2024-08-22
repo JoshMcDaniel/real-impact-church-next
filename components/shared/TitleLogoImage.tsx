@@ -3,8 +3,8 @@ import { useOrganizationConfig } from '../../constants/app-config/app-config-hoo
 import Image from 'next/image';
 
 type TitleLogoImageProps = {
-  height: string;
-  width: string;
+  height: number;
+  width: number;
 };
 
 export const TitleLogoImage = (props: TitleLogoImageProps) => {
@@ -32,6 +32,6 @@ export const TitleLogoImage = (props: TitleLogoImageProps) => {
 };
 
 TitleLogoImage.defaultProps = {
-  height: '50px',
-  width: '150px',
+  height: 50,
+  width: 150,
 };

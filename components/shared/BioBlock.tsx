@@ -7,6 +7,9 @@ import {
   useTheme,
 } from '@mui/material';
 import { StaffPerson } from '../../pages/staff';
+import BlockContent from '@sanity/block-content-to-react';
+import { urlFor } from '../../src/sanity/lib/image';
+// import sanityUrlFor from '../../src/sanity/lib/sanityUrlFor';
 
 const bioBlockConfig = {
   avatar: {
@@ -59,8 +62,8 @@ export const BioBlock = (props: BioBlocProps) => {
   const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
   const avatarProps = {
     ...bioBlockConfig.avatar,
-    alt: `${props.person.firstName} ${props.person.lastName}`,
-    src: props.person.imgURL,
+    alt: `${props.person.name}`,
+    src: `${urlFor(props.person.image).url()}`,
   };
 
   return (
@@ -87,11 +90,9 @@ export const BioBlock = (props: BioBlocProps) => {
         <Typography
           variant="h5"
           fontWeight="bold"
-        >{`${props.person.firstName} ${props.person.lastName}`}</Typography>
-        <Typography variant="subtitle1">
-          {props.person.positionTitle}
-        </Typography>
-        <Typography>{props.person.description}</Typography>
+        >{`${props.person.name}`}</Typography>
+        <Typography variant="subtitle1">{props.person.position}</Typography>
+        <BlockContent blocks={props.person.description} />
       </Box>
     </Box>
   );
