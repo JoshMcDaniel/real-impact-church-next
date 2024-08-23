@@ -10,7 +10,7 @@ export const weekdays: string[] = [
   'Saturday',
 ];
 
-export const getWeekDayName = (date: Dayjs): string => {
+export const getWeekDayName = (date: Dayjs | null): string => {
   if (!date) {
     return '';
   }

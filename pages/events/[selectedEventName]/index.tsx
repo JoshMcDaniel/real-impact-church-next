@@ -1,23 +1,16 @@
-import {
-  Box,
-  Card,
-  CardMedia,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
-import axios, { AxiosRequestConfig } from 'axios';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { Fragment } from 'react';
 import DynamicHead from '../../../components/DynamicHead/DynamicHead';
 import EventDateTimeCard from '../../../components/Events/EventDateTimeCard';
 import EventDetailsCard from '../../../components/Events/EventDetailsCard';
-import EventLocationCard from '../../../components/Events/EventLocationCard';
 import { Event, EventType } from '../../../constants/Event';
-import appConfig from '../../../constants/app-config/config.json';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import LoadingIndication from '../../../components/shared/LoadingIndication';
 import { useRouter } from 'next/router';
 import SelectedEventNotFound from '../../../components/Events/SelectedEventNotFound';
+import { client, sanityFetch } from '../../../src/sanity/lib/client';
+import FixedBackgroundImage from '../../../components/shared/FixedBackgroundImage';
+import { groq } from 'next-sanity';
 
 const SelectedEvent = (props: { event: EventType }) => {
   const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
@@ -34,24 +27,46 @@ const SelectedEvent = (props: { event: EventType }) => {
 
   return (
     <Fragment>
-      <DynamicHead title={event.name} description={event.description} />
-      <Box component="main" className="center-container">
+      <DynamicHead title={event.name} description={event.summary} />
+      <Box component="main">
         <Box>
-          <Card raised>
-            <CardMedia
-              component="img"
-              image={event.imageUrl}
-              alt={event.name}
+          <Box
+            component="section"
+            sx={{
+              position: 'relative',
+              height: '60vh',
+            }}
+          >
+            <FixedBackgroundImage
+              imgPath={event.imageUrl}
+              height="100%"
+              width="100%"
             />
-          </Card>
+            <Box
+              display="grid"
+              alignContent={'center'}
+              padding={'1rem 2rem'}
+              bgcolor={'rgba(0, 0, 0, 0.5)'}
+              position={'absolute'}
+              bottom={'0'}
+              color={'white'}
+              width={'100%'}
+            >
+              <Typography
+                variant={isMediumView ? 'h4' : 'h5'}
+                component="h1"
+                fontWeight="bolder"
+                textAlign={isMediumView ? 'center' : 'left'}
+              >
+                {event.name}
+              </Typography>
+            </Box>
+          </Box>
           <Box
             display="grid"
             gap="2rem"
             padding={isMediumView ? '2rem' : '1rem'}
           >
-            <Typography variant="h4" component="h1" fontWeight="bolder">
-              {event.name}
-            </Typography>
             <Box
               sx={{
                 display: 'grid',
@@ -67,7 +82,6 @@ const SelectedEvent = (props: { event: EventType }) => {
                 }}
               >
                 <EventDateTimeCard event={event} />
-                <EventLocationCard eventLocation={event.location} />
               </Box>
               <EventDetailsCard event={event} />
             </Box>
@@ -79,8 +93,22 @@ const SelectedEvent = (props: { event: EventType }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await axios.get(appConfig.website.events.routes.get_all_events);
-  const events: EventType[] = res.data.events;
+  // const res = await axios.get(appConfig.website.events.routes.get_all_events);
+  // const events: EventType[] = res.data.events;
+  const events: EventType[] = await sanityFetch({
+    query: groq`*[_type == "events"] {
+    _id,
+    name,
+    "slug": slug.current,
+    image,
+    startDateTime,
+    endDateTime,
+    summary,
+    description
+    }`,
+    tags: ['staff'],
+  });
+
   return {
     fallback: true,
     paths: events.map((event) => ({
@@ -92,13 +120,26 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const eventName = context?.params?.selectedEventName;
-  const config: AxiosRequestConfig = {
-    params: { route: eventName },
-  };
-  const url = appConfig.website.events.routes.get_event;
-  const res = await axios.get(url, config);
-  const event = res.data.event;
+  const slug = context?.params?.selectedEventName;
+  // const config: AxiosRequestConfig = {
+  //   params: { route: slug },
+  // };
+  // const url = appConfig.website.events.routes.get_event;
+  // const res = await axios.get(url, config);
+  // const event = res.data.event;
+
+  const query = `*[_type == "events" && slug.current == $slug][0] {
+    _id,
+    name,
+    image,
+    startDateTime,
+    endDateTime,
+    summary,
+    description
+  }`;
+
+  const params = { slug };
+  const event = await client.fetch(query, params);
 
   return {
     props: {

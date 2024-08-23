@@ -1,6 +1,5 @@
 import { Link, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/system';
-import axios from 'axios';
 import React, { Fragment } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -10,7 +9,8 @@ import { useRouter } from 'next/router';
 import EventCard from '../../components/Events/EventCard';
 import NoEvents from '../../components/Events/NoEvents';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
-import appConfig from '../../constants/app-config/config.json';
+import { sanityFetch } from '../../src/sanity/lib/client';
+import { groq } from 'next-sanity';
 
 export const Events = (props: { events: EventType[] }) => {
   const { events } = props;
@@ -59,8 +59,22 @@ export const Events = (props: { events: EventType[] }) => {
 };
 
 export async function getStaticProps() {
-  const res = await axios.get(appConfig.website.events.routes.get_all_events);
-  const events = res.data.events;
+  // const res = await axios.get(appConfig.website.events.routes.get_all_events);
+  // const events = res.data.events;
+
+  const events: EventType[] = await sanityFetch({
+    query: groq`*[_type == "events"] {
+    _id,
+    name,
+    "slug": slug.current,
+    image,
+    startDateTime,
+    endDateTime,
+    summary,
+    description
+    }`,
+    tags: ['staff'],
+  });
 
   return {
     props: {

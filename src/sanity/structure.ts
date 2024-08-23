@@ -6,8 +6,12 @@ export const structure: StructureResolver = (S) =>
     .title('Manage - Real Impact Church')
     .items([
       S.documentTypeListItem('staff').title('Staff'),
+      S.documentTypeListItem('events').title('Events'),
       S.divider(),
       ...S.documentTypeListItems().filter(
-        (item) => item.getId() && !['staff'].includes(item.getId()!)
+        (item) =>
+          item.getId() &&
+          !['staff'].includes(item.getId()!) &&
+          !['events'].includes(item.getId()!)
       ),
     ]);

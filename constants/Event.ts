@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import { getWeekDayName } from './date-time';
+import { ArraySchemaType, BlockSchemaType, Image } from 'sanity';
+import { urlFor } from '../src/sanity/lib/image';
 
 export type EventTypeLocation = {
   streetAddress: string;
@@ -7,23 +9,24 @@ export type EventTypeLocation = {
   state: string;
   zipCode: number;
   mapLink: string;
-}
+};
 
 export type EventType = {
   _id: string;
   name: string;
-  route: string;
-  description: string;
-  imageUrl: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  location: EventTypeLocation;
+  slug: string;
+  summary: string;
+  description: ArraySchemaType<BlockSchemaType>;
+  image: Image;
+  startDateTime: string;
+  endDateTime: string;
+  // location: EventTypeLocation;
 };
 
 export class Event {
-
-  constructor(private event: EventType) { }
+  constructor(private event: EventType) {
+    console.log({ event });
+  }
 
   get id(): string {
     return this.event._id;
@@ -34,44 +37,55 @@ export class Event {
   }
 
   get route(): string {
-    return this.event.route;
+    return this.event.slug;
   }
 
-  get description(): string {
+  get summary(): string {
+    return this.event.summary;
+  }
+
+  get description(): ArraySchemaType<BlockSchemaType> {
     return this.event.description;
   }
 
   get imageUrl(): string {
-    return this.event.imageUrl;
+    return `${urlFor(this.event.image).url()}`;
   }
 
-  get date(): string {
-    return this.event.date;
-  }
+  // get date(): string {
+  //   return this.event.date;
+  // }
 
-  get dateAsDateObj(): dayjs.Dayjs | null {
-    if (!!this.event.date) {
-      return dayjs(this.event.date);
+  dateAsDateObj(dateTime: string): dayjs.Dayjs | null {
+    if (!!dateTime) {
+      return dayjs(dateTime);
     }
     return null;
   }
 
-  get dayOfWeek(): string {
-    if (this.dateAsDateObj) {
-      return getWeekDayName(this.dateAsDateObj);
+  get startDayOfWeek(): string {
+    if (this.dateAsDateObj(this.event.startDateTime)) {
+      return getWeekDayName(this.dateAsDateObj(this.event.startDateTime));
+    }
+    return '';
+  }
+
+  get endDayOfWeek(): string {
+    if (this.dateAsDateObj(this.event.endDateTime)) {
+      return getWeekDayName(this.dateAsDateObj(this.event.endDateTime));
     }
     return '';
   }
 
   get startTime(): string {
-    return this.event.startTime;
+    return this.event.startDateTime;
   }
 
   get endTime(): string {
-    return this.event.endTime;
+    return this.event.endDateTime;
   }
 
-  get location(): EventTypeLocation {
-    return this.event.location;
-  }
+  // get location(): EventTypeLocation {
+  //   return this.event.location;
+  // }
 }

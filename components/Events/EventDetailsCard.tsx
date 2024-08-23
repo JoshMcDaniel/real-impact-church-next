@@ -1,5 +1,6 @@
 import { Box, Paper, Typography } from '@mui/material';
 import { Event } from '../../constants/Event';
+import BlockContent from '@sanity/block-content-to-react';
 
 type EventDetailsCardProps = {
   event: Event;
@@ -21,7 +22,7 @@ const EventDetailsCard = (props: EventDetailsCardProps) => {
         }}
       >
         <Typography fontWeight="bolder">Event details</Typography>
-        <Typography>{event.description}</Typography>
+        <BlockContent blocks={event.description} />
       </Box>
     </Paper>
   );

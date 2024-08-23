@@ -10,15 +10,26 @@ const EventDateTimeCard = (props: { event: Event }) => {
     <Paper className={styles.editContainer}>
       <EventDate event={event} />
       <Divider />
-      <Box className={styles.edtSectionContainer}>
+      <Box
+        className={styles.edtSectionContainer}
+        display={'grid'}
+        gridAutoFlow={'column'}
+        gap={'1rem'}
+        justifyContent={'start'}
+        alignItems={'center'}
+      >
         <AccessTimeIcon />
         <Box>
           <Typography variant="caption">Begins</Typography>
-          <Typography>{event.startTime}</Typography>
+          <Typography>
+            {event.dateAsDateObj(event.startTime)?.format('h:mm a')}
+          </Typography>
         </Box>
         <Box>
           <Typography variant="caption">Ends</Typography>
-          <Typography>{event.endTime}</Typography>
+          <Typography>
+            {event.dateAsDateObj(event.endTime)?.format('h:mm a')}
+          </Typography>
         </Box>
       </Box>
     </Paper>

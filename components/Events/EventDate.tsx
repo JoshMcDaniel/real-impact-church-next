@@ -11,10 +11,12 @@ const EventDate = (props: { event: Event }) => {
       <EventIcon />
       <Box>
         <Typography>
-          {event?.dayOfWeek ? event.dayOfWeek : <Skeleton width="80px" />}
+          {event.startDayOfWeek ?? <Skeleton width="80px" />}
         </Typography>
         <Typography fontWeight="bolder">
-          {event?.dateAsDateObj?.format('MMM, DD') || <Skeleton width="80px" />}
+          {event?.dateAsDateObj(event.startTime)?.format('MMM, DD') || (
+            <Skeleton width="80px" />
+          )}
         </Typography>
       </Box>
     </Box>

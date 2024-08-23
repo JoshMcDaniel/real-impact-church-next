@@ -41,7 +41,11 @@ export const EventCard = (props: { event: Event }) => {
             <Box display="grid" gridAutoFlow="column" columnGap="1rem">
               <AccessTimeIcon />
               <Typography>
-                {event?.startTime ? event.startTime : <Skeleton width="80px" />}
+                {event?.startTime ? (
+                  event.dateAsDateObj(event.startTime)?.format('h:mm a')
+                ) : (
+                  <Skeleton width="80px" />
+                )}
               </Typography>
             </Box>
           </Box>
