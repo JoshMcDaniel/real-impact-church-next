@@ -84,7 +84,6 @@
         "description": "Connect with our loving Christian community here at Real Impact Church and see how you too can make a Real Impact for Christ!"
       },
       "subtitle": "Start a connection with Real Impact Church",
-      "request_connection_path": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/connections/requestConnection",
       "snackbar": {
         "success_message": "Success! We'll reach out to you soon.",
         "fail_message": "Something went wrong. Please try again."

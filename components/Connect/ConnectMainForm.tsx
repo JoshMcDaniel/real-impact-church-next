@@ -12,9 +12,16 @@ import {
   isValidName,
   isValidEmail,
   isValidPhoneNumber,
+  getNameError,
+  getEmailError,
+  getPhoneError,
+  getCommentsError,
   nameInputProps,
   emailInputProps,
   phoneNumberInputProps,
+  commentsInputProps,
+  formatPhoneNumber,
+  toTitleCase,
 } from '../../constants/validation';
 
 export interface ConnectMainFormContent {
@@ -22,6 +29,7 @@ export interface ConnectMainFormContent {
   lastName: string;
   email: string;
   phoneNumber: string;
+  comments: string;
 }
 
 type Props = {
@@ -36,6 +44,7 @@ const ConnectMainForm = (props: Props) => {
     lastName: '',
     email: '',
     phoneNumber: '',
+    comments: '',
   };
 
   const [form, setForm] = useState<ConnectMainFormContent>(initialForm);
@@ -44,26 +53,30 @@ const ConnectMainForm = (props: Props) => {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
     const { name, value } = event.target;
-    setForm((previousFormValue) => ({
-      ...previousFormValue,
-      [name]: value,
+    setForm((prev) => ({
+      ...prev,
+      [name]: name === 'phoneNumber' ? formatPhoneNumber(value) : value,
+    }));
+  };
+
+  const handleNameBlur = (field: 'firstName' | 'lastName') => () => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: toTitleCase(prev[field].trim()),
     }));
   };
 
   const handleFormSubmit = (event: any): void => {
     event.preventDefault();
     onSubmit(form);
-    setForm(() => initialForm);
+    setForm(initialForm);
   };
 
-  const isFormValid = (form: ConnectMainFormContent): boolean => {
-    return (
-      isValidName(form.firstName) &&
-      isValidName(form.lastName) &&
-      isValidEmail(form.email) &&
-      isValidPhoneNumber(form.phoneNumber)
-    );
-  };
+  const isFormValid = (form: ConnectMainFormContent): boolean =>
+    isValidName(form.firstName) &&
+    isValidName(form.lastName) &&
+    isValidEmail(form.email) &&
+    isValidPhoneNumber(form.phoneNumber);
 
   const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
 
@@ -89,7 +102,9 @@ const ConnectMainForm = (props: Props) => {
           required
           inputProps={nameInputProps}
           onChange={handleInputChange}
+          onBlur={handleNameBlur('firstName')}
           error={!!form.firstName && !isValidName(form.firstName)}
+          helperText={!!form.firstName ? getNameError(form.firstName) : ' '}
         />
         <TextField
           id="lastName"
@@ -103,7 +118,9 @@ const ConnectMainForm = (props: Props) => {
           required
           inputProps={nameInputProps}
           onChange={handleInputChange}
+          onBlur={handleNameBlur('lastName')}
           error={!!form.lastName && !isValidName(form.lastName)}
+          helperText={!!form.lastName ? getNameError(form.lastName) : ' '}
         />
         <TextField
           id="email"
@@ -116,8 +133,9 @@ const ConnectMainForm = (props: Props) => {
           color="primary"
           required
           inputProps={emailInputProps}
-          error={!!form.email && !isValidEmail(form.email)}
           onChange={handleInputChange}
+          error={!!form.email && !isValidEmail(form.email)}
+          helperText={!!form.email ? getEmailError(form.email) : ' '}
         />
         <TextField
           id="phoneNumber"
@@ -129,11 +147,33 @@ const ConnectMainForm = (props: Props) => {
           variant="filled"
           color="primary"
           required
+          placeholder="(555) 555-5555"
           inputProps={phoneNumberInputProps}
           onChange={handleInputChange}
           error={!!form.phoneNumber && !isValidPhoneNumber(form.phoneNumber)}
+          helperText={!!form.phoneNumber ? getPhoneError(form.phoneNumber) : ' '}
         />
       </Box>
+      <TextField
+        id="comments"
+        name="comments"
+        value={form.comments}
+        disabled={disabled}
+        type="text"
+        label="Anything you'd like us to know? (optional)"
+        variant="filled"
+        color="primary"
+        multiline
+        rows={4}
+        inputProps={commentsInputProps}
+        onChange={handleInputChange}
+        error={!!form.comments && !!getCommentsError(form.comments)}
+        helperText={
+          form.comments
+            ? getCommentsError(form.comments) ?? `${form.comments.length} / ${commentsInputProps.maxLength}`
+            : ' '
+        }
+      />
       <Fab
         variant="extended"
         type="submit"
