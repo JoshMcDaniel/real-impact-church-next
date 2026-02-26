@@ -9,8 +9,9 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import axios from 'axios';
 import { GetStaticProps } from 'next';
+import { groq } from 'next-sanity';
+import { sanityFetch } from '../src/sanity/lib/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import DynamicHead from '../components/DynamicHead/DynamicHead';
@@ -19,7 +20,6 @@ import { Service } from '../components/Home/ScheduleSummaryService';
 import AddressBlock from '../components/shared/AddressBlock';
 import SectionIntroImage from '../components/shared/SectionIntroImage';
 import { useHomeConfig } from '../constants/app-config/app-config-hooks';
-import appConfig from '../constants/app-config/config.json';
 
 type HomeProps = {
   services: Service[];
@@ -101,8 +101,15 @@ const Home = (props: HomeProps) => {
 
 // This function gets called at build time on server-side.
 export const getStaticProps: GetStaticProps = async () => {
-  const res = await axios.get(appConfig.organization.schedule.services.route);
-  const services = res.data.services;
+  const services: Service[] = await sanityFetch({
+    query: groq`*[_type == "service"] | order(displayOrder asc) {
+      title,
+      dayOfWeek,
+      time,
+      description
+    }`,
+    tags: ['service'],
+  });
 
   return {
     props: {

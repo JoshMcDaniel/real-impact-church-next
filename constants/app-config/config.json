@@ -587,10 +587,6 @@
         "description": "Real Impact logo"
       }
     },
-    "schedule": {
-      "services": {
-        "route": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/services"
-      }
-    }
+    "schedule": {}
   }
 }
