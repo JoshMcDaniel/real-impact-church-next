@@ -49,6 +49,10 @@ export class Event {
   }
 
   get imageUrl(): string {
+    // Events created in Sanity without an image fall back to a default photo
+    if (!this.event.image?.asset) {
+      return '/images/real_impact_church_about_intro.jpg';
+    }
     return `${urlFor(this.event.image).url()}`;
   }
 
