@@ -253,7 +253,10 @@ export const UpcomingEvents = ({ events, sundayMorning }: UpcomingEventsProps) =
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+            // At most 3 columns; each card stays one column wide (≥280px) even when
+            // there are only one or two events, instead of stretching across the row.
+            gridTemplateColumns:
+              'repeat(auto-fill, minmax(min(100%, max(280px, calc((100% - 48px) / 3))), 1fr))',
             gap: 3,
           }}
         >
