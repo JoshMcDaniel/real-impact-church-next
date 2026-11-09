@@ -1,12 +1,9 @@
 /**
  * Public site origin for canonical URLs, Open Graph tags and the sitemap.
- * Prefer NEXT_PUBLIC_SITE_URL; otherwise use Vercel's production domain when available.
+ * Defaults to the production domain so preview deployments also point search
+ * engines at the live site. Override with NEXT_PUBLIC_SITE_URL if the domain changes.
  */
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : '');
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://realimpactchurch.com';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
