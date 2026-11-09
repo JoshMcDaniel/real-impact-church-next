@@ -77,6 +77,10 @@ export const isValidPhoneNumber = (phoneNumber: string | number): boolean => {
   return !!pn && !!pn.match(phoneNumberRegex);
 };
 
+/** Phone is optional: empty is fine, otherwise it must be a valid number. */
+export const isValidOptionalPhoneNumber = (phoneNumber: string | undefined | null): boolean =>
+  !phoneNumber?.toString().trim() || isValidPhoneNumber(phoneNumber);
+
 export const getPhoneError = (phoneNumber: string): string | null => {
   if (!phoneNumber) return null;
   if (!phoneNumber.match(phoneNumberRegex)) return 'Enter a 10-digit US phone number';

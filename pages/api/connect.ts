@@ -1,7 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Resend } from 'resend';
+import {
+  commentsInputProps,
+  isValidEmail,
+  isValidName,
+  isValidOptionalPhoneNumber,
+} from '../../constants/validation';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+/** Escapes user input before it goes into the notification email's HTML. */
+const escapeHtml = (value: string): string =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 
 function buildEmailHtml(
   firstName: string,
@@ -10,6 +24,11 @@ function buildEmailHtml(
   phoneNumber: string,
   comments?: string
 ): string {
+  firstName = escapeHtml(firstName);
+  lastName = escapeHtml(lastName);
+  email = escapeHtml(email);
+  phoneNumber = escapeHtml(phoneNumber);
+  comments = comments ? escapeHtml(comments) : comments;
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +82,9 @@ function buildEmailHtml(
                   <td style="padding:14px 20px;background-color:#edf2f4;${comments ? 'border-bottom:1px solid #dde6ea;' : ''}">
                     <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#888;">Phone</p>
                     <p style="margin:4px 0 0 0;font-size:16px;">
-                      <a href="tel:${phoneNumber}" style="color:#d90429;text-decoration:none;">${phoneNumber}</a>
+                      ${phoneNumber
+                        ? `<a href="tel:${phoneNumber}" style="color:#d90429;text-decoration:none;">${phoneNumber}</a>`
+                        : '<span style="color:#888;">Not provided</span>'}
                     </p>
                   </td>
                 </tr>
@@ -107,10 +128,18 @@ export default async function handler(
 
   const { firstName, lastName, email, phoneNumber, comments } = req.body ?? {};
 
-  if (!firstName?.trim() || !lastName?.trim() || !email?.trim() || !phoneNumber?.trim()) {
+  // Same rules as the form; also keeps line breaks and markup out of email headers.
+  const str = (v: unknown) => (typeof v === 'string' ? v : '');
+  if (
+    !isValidName(str(firstName)) ||
+    !isValidName(str(lastName)) ||
+    !isValidEmail(str(email)) ||
+    !isValidOptionalPhoneNumber(str(phoneNumber)) ||
+    str(comments).length > commentsInputProps.maxLength
+  ) {
     return res.status(400).json({
       success: false,
-      error: 'All fields are required: firstName, lastName, email, phoneNumber',
+      error: 'Please provide a valid first name, last name and email. Phone and comments are optional.',
     });
   }
 
@@ -119,6 +148,8 @@ export default async function handler(
     return res.status(500).json({ success: false, error: 'Email service is not configured' });
   }
 
+  // Created per request (after the key check): the Resend constructor throws without a key.
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const name = `${firstName.trim()} ${lastName.trim()}`;
 
   try {
@@ -127,8 +158,8 @@ export default async function handler(
       to: 'RealImpactChurch@gmail.com',
       replyTo: `${name} <${email.trim()}>`,
       subject: `New Connection Request from ${name}`,
-      html: buildEmailHtml(firstName.trim(), lastName.trim(), email.trim(), phoneNumber.trim(), comments?.trim()),
-      text: `New connection request from the Real Impact Church website.\n\nName: ${name}\nEmail: ${email.trim()}\nPhone: ${phoneNumber.trim()}${comments?.trim() ? `\n\nComments:\n${comments.trim()}` : ''}`,
+      html: buildEmailHtml(firstName.trim(), lastName.trim(), email.trim(), str(phoneNumber).trim(), str(comments).trim()),
+      text: `New connection request from the Real Impact Church website.\n\nName: ${name}\nEmail: ${email.trim()}\nPhone: ${str(phoneNumber).trim() || 'Not provided'}${str(comments).trim() ? `\n\nComments:\n${str(comments).trim()}` : ''}`,
     });
 
     if (error) {

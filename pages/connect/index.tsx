@@ -1,183 +1,301 @@
-import {
-  Box,
-  Container,
-  Paper,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
-import PeopleIcon from '@mui/icons-material/People';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import Box from '@mui/material/Box';
+import GlowLayer from '../../components/shared/GlowLayer';
+import Typography from '@mui/material/Typography';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
 import axios from 'axios';
-import React, { Fragment, useState } from 'react';
-import ConnectMainForm, {
-  ConnectMainFormContent,
-} from '../../components/Connect/ConnectMainForm';
+import { GetStaticProps } from 'next';
+import { groq } from 'next-sanity';
+import { ReactNode, useState } from 'react';
+import ConnectMainForm, { ConnectMainFormContent } from '../../components/Connect/ConnectMainForm';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
-import CommonSnackbar, {
-  CommonSnackbarState,
-  initialCommonSnackbarState,
-} from '../../components/shared/CommonSnackbar';
-import LoadingIndication from '../../components/shared/LoadingIndication';
-import { useConnectConfig } from '../../constants/app-config/app-config-hooks';
+import CommonSnackbar, { CommonSnackbarState, initialCommonSnackbarState } from '../../components/shared/CommonSnackbar';
+import PageHero from '../../components/shared/PageHero';
+import PillButton from '../../components/shared/PillButton';
+import PillLabel from '../../components/shared/PillLabel';
+import {
+  useConnectConfig,
+  useMediaConfig,
+  useOrganizationConfig,
+} from '../../constants/app-config/app-config-hooks';
+import { brand, contentMaxWidth } from '../../constants/brand';
+import { Service } from '../../constants/Service';
+import { breadcrumbJsonLd } from '../../constants/structured-data';
+import { getPrimaryService, getSundayMorning, shortScheduleLabel } from '../../constants/sunday-schedule';
+import { sanityFetch } from '../../src/sanity/lib/client';
 
 const connectReasons = [
   {
-    icon: <PeopleIcon fontSize="large" sx={{ color: '#d90429' }} />,
-    title: 'Join Our Family',
-    description:
-      'Experience genuine community with people who will love, encourage, and walk alongside you.',
+    icon: <GroupsOutlinedIcon />,
+    title: 'Join our family',
+    description: 'Experience genuine community with people who will love, encourage, and walk alongside you.',
   },
   {
-    icon: <FavoriteIcon fontSize="large" sx={{ color: '#d90429' }} />,
-    title: 'Let Us Pray for You',
-    description:
-      "Share what's on your heart and let our church family lift you up in prayer.",
+    icon: <FavoriteBorderIcon />,
+    title: 'Let us pray for you',
+    description: 'Share what’s on your heart and let our church family lift you up in prayer.',
   },
   {
-    icon: <MenuBookIcon fontSize="large" sx={{ color: '#d90429' }} />,
-    title: 'Grow in Your Faith',
-    description:
-      'Discover Bible studies, small groups, and resources to help you go deeper in your walk with God.',
+    icon: <MenuBookOutlinedIcon />,
+    title: 'Grow in your faith',
+    description: 'Discover Bible studies, small groups, and resources to help you go deeper in your walk with God.',
   },
   {
-    icon: <VolunteerActivismIcon fontSize="large" sx={{ color: '#d90429' }} />,
-    title: 'Make a Real Impact',
-    description:
-      'Find your place to serve and use your gifts to make a difference in our community and beyond.',
+    icon: <VolunteerActivismOutlinedIcon />,
+    title: 'Make a real impact',
+    description: 'Find your place to serve and use your gifts to make a difference in our community and beyond.',
   },
 ];
 
-export const Connect = () => {
-  const { snackbar, header } = useConnectConfig();
-  const theme = useTheme();
-  const isMediumView = useMediaQuery(theme.breakpoints.up('md'));
+const socialLabels: Record<string, string> = { FACEBOOK: 'Facebook', INSTAGRAM: 'Instagram', YOUTUBE: 'YouTube' };
 
-  const [requestPending, setRequestPending] = useState<boolean>(false);
-  const [snackbarState, setSnackbarState] = useState<CommonSnackbarState>(
-    initialCommonSnackbarState
-  );
+const IconTile = ({ children, size = 48 }: { children: ReactNode; size?: number }) => (
+  <Box
+    aria-hidden
+    sx={{
+      flex: 'none',
+      width: size,
+      height: size,
+      borderRadius: size > 50 ? '16px' : '14px',
+      backgroundColor: brand.redTint,
+      color: brand.red,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    {children}
+  </Box>
+);
 
-  const handleOnSubmit = (form: ConnectMainFormContent): void => {
-    if (!requestPending && !!form) {
-      submitConnectionForm(form);
+const cardSx = {
+  backgroundColor: brand.white,
+  border: `1px solid ${brand.line}`,
+  borderRadius: '24px',
+};
+
+type ConnectProps = { services: Service[] };
+
+export const Connect = ({ services }: ConnectProps) => {
+  const { snackbar, header, hero } = useConnectConfig();
+  const org = useOrganizationConfig();
+  const { social_media } = useMediaConfig();
+  const sundayMorning = getSundayMorning(getPrimaryService(services));
+  const { contact } = org;
+
+  const [requestPending, setRequestPending] = useState(false);
+  const [snackbarState, setSnackbarState] = useState<CommonSnackbarState>(initialCommonSnackbarState);
+
+  /** Sends the form; resolves true on success so the form can clear itself. */
+  const handleOnSubmit = async (form: ConnectMainFormContent): Promise<boolean> => {
+    if (requestPending) return false;
+    setRequestPending(true);
+    try {
+      await axios.post('/api/connect', form);
+      setSnackbarState({ open: true, success: true, message: snackbar.success_message });
+      return true;
+    } catch {
+      setSnackbarState({ open: true, success: false, message: snackbar.fail_message });
+      return false;
+    } finally {
+      setRequestPending(false);
     }
   };
 
-  const submitConnectionForm = (form: ConnectMainFormContent): void => {
-    setRequestPending(true);
-
-    axios
-      .post('/api/connect', form)
-      .then(() => {
-        setSnackbarState({
-          open: true,
-          success: true,
-          message: snackbar.success_message,
-        });
-      })
-      .catch(() => {
-        setSnackbarState({
-          open: true,
-          success: false,
-          message: snackbar.fail_message,
-        });
-      })
-      .finally(() => {
-        setRequestPending(false);
-      });
-  };
-
   return (
-    <Fragment>
-      <DynamicHead title={header.title} description={header.description} />
+    <Box sx={{ backgroundColor: brand.paper, color: brand.text }}>
+      <DynamicHead
+        fullTitle={header.title}
+        description={header.description}
+        image={hero.image.path}
+        imageAlt={hero.image.description}
+        jsonLd={[breadcrumbJsonLd([{ name: 'Connect', path: '/connect' }])]}
+      />
+      <Box component="main">
+        <PageHero eyebrow={hero.eyebrow} title={hero.title} text={hero.text} image={hero.image} overlay={0.6} />
 
-      {/* Hero */}
-      <Box
-        sx={{
-          backgroundColor: '#2b2b2b',
-          color: '#ffffff',
-          textAlign: 'center',
-          padding: isMediumView ? '4rem 2rem' : '3rem 1.5rem',
-        }}
-      >
-        <Typography
-          variant={isMediumView ? 'h3' : 'h4'}
-          component="h1"
-          fontWeight="bold"
-          gutterBottom
-        >
-          We&rsquo;d Love to Meet You
-        </Typography>
-        <Typography
-          variant={isMediumView ? 'h6' : 'body1'}
-          sx={{ color: '#d90429', fontWeight: 600 }}
-          gutterBottom
-        >
-          Real Impact Church is saving a place just for you
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: '#cccccc', maxWidth: '560px', margin: '0.75rem auto 0' }}
-        >
-          Whether you&rsquo;re new to faith or looking for a church home, we
-          want to connect with you. Fill out the form below and someone from our
-          team will reach out personally.
-        </Typography>
-      </Box>
-
-      {/* Body */}
-      <Container maxWidth="lg" sx={{ py: isMediumView ? '4rem' : '2rem' }}>
+        {/* Form + Why connect. Form comes first on phones (wrap-reverse). */}
         <Box
-          display="grid"
-          gridTemplateColumns={isMediumView ? '1fr 1.4fr' : '1fr'}
-          gap="3rem"
-          alignItems="start"
+          component="section"
+          aria-label="Connect with us"
+          sx={{
+            maxWidth: contentMaxWidth,
+            mx: 'auto',
+            px: 3,
+            pt: { xs: 7, md: 9 },
+            pb: { xs: 8, md: 11.25 },
+            display: 'flex',
+            flexWrap: 'wrap-reverse',
+            gap: 5,
+            alignItems: 'flex-start',
+          }}
         >
-          {/* Left — reasons to connect */}
-          <Stack spacing={3}>
-            <Typography variant="h5" fontWeight="bold" color="text.primary">
-              Why Connect?
-            </Typography>
-            {connectReasons.map((reason) => (
-              <Box key={reason.title} display="flex" gap="1rem" alignItems="flex-start">
-                <Box sx={{ mt: '2px', flexShrink: 0 }}>{reason.icon}</Box>
-                <Box>
-                  <Typography variant="subtitle1" fontWeight="bold" color="text.primary">
-                    {reason.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" lineHeight={1.7}>
-                    {reason.description}
-                  </Typography>
+          <Box sx={{ flex: '1 1 340px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <PillLabel tone="dark">Why connect?</PillLabel>
+              <Typography component="h2" sx={{ m: 0, fontSize: 'clamp(28px, 3vw, 38px)', fontWeight: 800, color: brand.charcoal, lineHeight: 1.12 }}>
+                There’s a place for you here.
+              </Typography>
+            </Box>
+            <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {connectReasons.map((reason) => (
+                <Box component="li" key={reason.title} sx={{ ...cardSx, borderRadius: '20px', p: '20px', display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+                  <IconTile>{reason.icon}</IconTile>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <Typography component="h3" sx={{ m: 0, fontSize: 17, fontWeight: 800, color: brand.charcoal }}>
+                      {reason.title}
+                    </Typography>
+                    <Typography component="p" sx={{ m: 0, fontSize: 15, lineHeight: 1.65 }}>
+                      {reason.description}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
-          </Stack>
+              ))}
+            </Box>
+          </Box>
 
-          {/* Right — form */}
-          <Paper
-            elevation={3}
+          <Box
             sx={{
-              padding: isMediumView ? '2.5rem' : '1.5rem',
-              borderRadius: '12px',
-              borderTop: '4px solid #d90429',
+              flex: '1.4 1 480px',
+              minWidth: 0,
+              position: 'relative',
+              backgroundColor: brand.footer,
+              color: brand.white,
+              borderRadius: '28px',
+              p: 'clamp(24px, 4vw, 48px)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '22px',
+              boxShadow: '0 24px 60px rgba(20,20,20,.18)',
             }}
           >
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Get in Touch
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: '1.5rem' }}>
-              We&rsquo;ll reach out to you soon after you submit.
-            </Typography>
-            <ConnectMainForm onSubmit={handleOnSubmit} disabled={requestPending} />
-          </Paper>
+            <GlowLayer glows={[{ right: -120, top: -140, size: 380, opacity: 0.18 }]} />
+            <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <PillLabel>Get in touch</PillLabel>
+              <Typography component="h2" sx={{ m: 0, fontSize: 'clamp(28px, 3.2vw, 40px)', fontWeight: 800, lineHeight: 1.1 }}>
+                Send us a message
+              </Typography>
+              <Typography component="p" sx={{ m: 0, fontSize: 15, lineHeight: 1.6, color: '#d6dadd' }}>
+                We’ll reach out to you soon after you submit.
+              </Typography>
+            </Box>
+            <Box sx={{ position: 'relative' }}>
+              <ConnectMainForm onSubmit={handleOnSubmit} disabled={requestPending} />
+            </Box>
+          </Box>
         </Box>
-      </Container>
 
-      {requestPending && <LoadingIndication loadingText="Submitting form..." />}
+        {/* Other ways to connect */}
+        <Box component="section" aria-labelledby="other-title" sx={{ backgroundColor: brand.mist, px: 3, py: { xs: 8, md: 11.25 } }}>
+          <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <PillLabel>Other ways to connect</PillLabel>
+              <Typography id="other-title" component="h2" sx={{ m: 0, fontSize: 'clamp(30px, 3.4vw, 44px)', fontWeight: 800, color: brand.charcoal, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+                Come by, write, or follow along
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: 'grid',
+                // At most two columns: Visit spans both rows on the left, Email and Follow stack on the right.
+                gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, max(360px, calc((100% - 24px) / 2))), 1fr))',
+                gap: 3,
+              }}
+            >
+              <Box component="article" sx={{ ...cardSx, gridRow: 'span 2', p: 4, display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <IconTile size={52}>
+                  <PlaceOutlinedIcon />
+                </IconTile>
+                <Typography component="h3" sx={{ m: 0, fontSize: 21, fontWeight: 800, color: brand.charcoal }}>
+                  Visit on Sunday
+                </Typography>
+                <Box component="address" sx={{ fontStyle: 'normal', fontSize: 15, lineHeight: 1.6 }}>
+                  {contact.street}
+                  <br />
+                  {contact.city}, {contact.state} {contact.zip_code}
+                </Box>
+                <Box component="ul" aria-label="Sunday schedule" sx={{ listStyle: 'none', m: 0, p: 0, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {sundayMorning.map((item) => {
+                    const highlight = item.key === 'worship';
+                    return (
+                      <Box
+                        component="li"
+                        key={item.key}
+                        sx={{
+                          backgroundColor: highlight ? brand.red : brand.mist,
+                          color: highlight ? brand.white : brand.charcoal,
+                          borderRadius: '999px',
+                          px: '12px',
+                          py: '6px',
+                          fontSize: 13,
+                          fontWeight: highlight ? 800 : 700,
+                        }}
+                      >
+                        {shortScheduleLabel(item)}
+                      </Box>
+                    );
+                  })}
+                </Box>
+                <Box
+                  component="a"
+                  href={contact.google_maps_link}
+                  rel="noopener"
+                  sx={{ mt: 'auto', color: brand.red, fontWeight: 700, fontSize: 15, minHeight: 32, display: 'inline-flex', alignItems: 'center', width: 'fit-content' }}
+                >
+                  Get directions →
+                </Box>
+              </Box>
+
+              <Box component="article" sx={{ ...cardSx, p: '24px 28px', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: '16px 20px' }}>
+                <IconTile size={52}>
+                  <MailOutlineIcon />
+                </IconTile>
+                <Box sx={{ flex: '1 1 220px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <Typography component="h3" sx={{ m: 0, fontSize: 21, fontWeight: 800, color: brand.charcoal }}>
+                    Email us
+                  </Typography>
+                  <Typography component="p" sx={{ m: 0, fontSize: 15, lineHeight: 1.6 }}>
+                    Prefer email? Write to us anytime.
+                  </Typography>
+                  <Box
+                    component="a"
+                    href={`mailto:${contact.email.primary}`}
+                    sx={{ color: brand.red, fontWeight: 700, fontSize: 16, wordBreak: 'break-all', minHeight: 32, display: 'inline-flex', alignItems: 'center' }}
+                  >
+                    {contact.email.primary}
+                  </Box>
+                </Box>
+              </Box>
+
+              <Box component="article" sx={{ ...cardSx, p: '24px 28px', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: '16px 20px' }}>
+                <IconTile size={52}>
+                  <ShareOutlinedIcon />
+                </IconTile>
+                <Box sx={{ flex: '1 1 220px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <Typography component="h3" sx={{ m: 0, fontSize: 21, fontWeight: 800, color: brand.charcoal }}>
+                    Follow along
+                  </Typography>
+                  <Typography component="p" sx={{ m: 0, fontSize: 15, lineHeight: 1.6 }}>
+                    Announcements, events and photos from our church family.
+                  </Typography>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px', pt: '6px' }}>
+                    {social_media.map((s) => (
+                      <PillButton key={s.platform} href={s.path} tone="outline" size="small">
+                        {socialLabels[s.platform] ?? s.platform}
+                      </PillButton>
+                    ))}
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
 
       <CommonSnackbar
         open={snackbarState.open}
@@ -185,8 +303,16 @@ export const Connect = () => {
         message={snackbarState.message}
         severity={snackbarState.success ? 'success' : 'error'}
       />
-    </Fragment>
+    </Box>
   );
+};
+
+export const getStaticProps: GetStaticProps<ConnectProps> = async () => {
+  const services = await sanityFetch<Service[]>({
+    query: groq`*[_type == "service"] | order(displayOrder asc) { title, dayOfWeek, time, description }`,
+    tags: ['service'],
+  });
+  return { props: { services: services ?? [] }, revalidate: 3600 };
 };
 
 export default Connect;
