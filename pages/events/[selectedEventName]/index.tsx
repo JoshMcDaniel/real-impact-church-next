@@ -4,12 +4,13 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { groq, PortableText, PortableTextComponents } from 'next-sanity';
+import { groq } from 'next-sanity';
 import Link from 'next/link';
 import DynamicHead from '../../../components/DynamicHead/DynamicHead';
 import AddToCalendar from '../../../components/Events/AddToCalendar';
 import EventCard from '../../../components/Events/EventCard';
 import PageHero from '../../../components/shared/PageHero';
+import RichText from '../../../components/shared/RichText';
 import { brand, contentMaxWidth } from '../../../constants/brand';
 import { Event, EVENT_FIELDS, EventType, UPCOMING_FILTER } from '../../../constants/Event';
 import { breadcrumbJsonLd, eventJsonLd } from '../../../constants/structured-data';
@@ -29,24 +30,6 @@ const labelSx = {
   letterSpacing: '.16em',
   textTransform: 'uppercase' as const,
   color: brand.muted,
-};
-
-/** Styles for rich text entered in Sanity. */
-const descriptionComponents: PortableTextComponents = {
-  block: {
-    normal: ({ children }) => (
-      <Typography component="p" sx={{ m: 0, fontSize: 17, lineHeight: 1.8 }}>
-        {children}
-      </Typography>
-    ),
-  },
-  marks: {
-    link: ({ children, value }) => (
-      <Box component="a" href={value?.href} rel="noopener" sx={{ color: brand.red, fontWeight: 700 }}>
-        {children}
-      </Box>
-    ),
-  },
 };
 
 const SelectedEvent = ({ event: eventData, isPast, moreEvents }: SelectedEventProps) => {
@@ -132,9 +115,7 @@ const SelectedEvent = ({ event: eventData, isPast, moreEvents }: SelectedEventPr
               </Typography>
             )}
             {event.description.length > 0 ? (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-                <PortableText value={event.description} components={descriptionComponents} />
-              </Box>
+              <RichText value={event.description} />
             ) : (
               !event.summary && (
                 <Typography component="p" sx={{ m: 0, fontSize: 17, lineHeight: 1.8 }}>

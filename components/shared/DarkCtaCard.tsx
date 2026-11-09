@@ -10,10 +10,12 @@ type DarkCtaCardProps = {
   text: string;
   /** Buttons shown on the right (below on narrow screens). */
   actions: ReactNode;
+  /** Optional extra content under the text (e.g. schedule pills). */
+  extra?: ReactNode;
 };
 
 /** Dark rounded call-to-action card with a soft red glow. */
-export const DarkCtaCard = ({ id, title, text, actions }: DarkCtaCardProps) => (
+export const DarkCtaCard = ({ id, title, text, actions, extra }: DarkCtaCardProps) => (
   <Box component="section" aria-labelledby={id} sx={{ maxWidth: contentMaxWidth, mx: 'auto', px: 3, py: { xs: 8, md: 11.25 } }}>
     <Box
       sx={{
@@ -37,6 +39,7 @@ export const DarkCtaCard = ({ id, title, text, actions }: DarkCtaCardProps) => (
         <Typography component="p" sx={{ m: 0, fontSize: 17, lineHeight: 1.7, color: '#d6dadd' }}>
           {text}
         </Typography>
+        {extra}
       </Box>
       <Box sx={{ position: 'relative', display: 'flex', flexWrap: 'wrap', gap: '12px' }}>{actions}</Box>
     </Box>
