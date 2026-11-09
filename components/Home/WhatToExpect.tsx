@@ -8,6 +8,7 @@ import { ReactNode } from 'react';
 import { brand, contentMaxWidth } from '../../constants/brand';
 import { useHomeConfig } from '../../constants/app-config/app-config-hooks';
 import { SundayItem } from '../../constants/sunday-schedule';
+import GlowLayer from '../shared/GlowLayer';
 import SectionHeader from '../shared/SectionHeader';
 
 const icons: Record<string, ReactNode> = {
@@ -34,6 +35,7 @@ export const WhatToExpect = ({ sundayMorning }: WhatToExpectProps) => {
         <SectionHeader
           id="expect-title"
           eyebrow="Your first Sunday"
+          eyebrowTone="dark"
           title="What to expect when you visit"
           aside={
             <Typography component="p" sx={{ m: 0, maxWidth: 420, fontSize: 17, lineHeight: 1.7 }}>
@@ -44,7 +46,8 @@ export const WhatToExpect = ({ sundayMorning }: WhatToExpectProps) => {
 
         <Box
           sx={{
-            backgroundColor: brand.charcoal,
+            position: 'relative',
+            backgroundColor: brand.footer,
             color: brand.white,
             borderRadius: '24px',
             p: { xs: '28px 18px', sm: '36px 36px 32px' },
@@ -53,7 +56,8 @@ export const WhatToExpect = ({ sundayMorning }: WhatToExpectProps) => {
             gap: '28px',
           }}
         >
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '8px 24px' }}>
+          <GlowLayer glows={[{ right: -120, top: -140, size: 380, opacity: 0.18 }]} />
+          <Box sx={{ position: 'relative', display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '8px 24px' }}>
             <Typography component="h3" sx={{ m: 0, fontSize: 24, fontWeight: 800 }}>
               Your Sunday morning
             </Typography>
@@ -80,7 +84,9 @@ export const WhatToExpect = ({ sundayMorning }: WhatToExpectProps) => {
                   component="li"
                   key={item.key}
                   sx={{
-                    backgroundColor: highlight ? brand.red : '#383838',
+                    position: 'relative',
+                    backgroundColor: highlight ? brand.red : 'rgba(255,255,255,.1)',
+                    border: highlight ? 'none' : '1px solid rgba(255,255,255,.22)',
                     borderRadius: '18px',
                     p: 3,
                     display: 'flex',
@@ -130,7 +136,8 @@ export const WhatToExpect = ({ sundayMorning }: WhatToExpectProps) => {
               key={item.title}
               sx={{
                 backgroundColor: brand.white,
-                borderRadius: '20px',
+                border: `1px solid ${brand.line}`,
+                borderRadius: '22px',
                 p: '32px 28px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -144,9 +151,9 @@ export const WhatToExpect = ({ sundayMorning }: WhatToExpectProps) => {
                 sx={{
                   width: 52,
                   height: 52,
-                  borderRadius: '50%',
-                  backgroundColor: brand.charcoal,
-                  color: brand.white,
+                  borderRadius: '16px',
+                  backgroundColor: brand.redTint,
+                  color: brand.red,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

@@ -106,7 +106,22 @@ const SelectedEvent = ({ event: eventData, isPast, moreEvents }: SelectedEventPr
           }}
         >
           <Box component="article" sx={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-            <Typography component="h2" sx={{ ...labelSx, letterSpacing: '.24em', color: brand.red }}>
+            <Typography
+              component="h2"
+              sx={{
+                alignSelf: 'flex-start',
+                m: 0,
+                backgroundColor: brand.red,
+                color: brand.white,
+                borderRadius: '999px',
+                px: 2,
+                py: '7px',
+                fontSize: 13,
+                fontWeight: 800,
+                letterSpacing: '.08em',
+                textTransform: 'uppercase',
+              }}
+            >
               About this event
             </Typography>
             {event.summary && (

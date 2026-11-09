@@ -29,6 +29,7 @@ export const StaffPreview = ({ staff }: StaffPreviewProps) => {
         <SectionHeader
           id="staff-title"
           eyebrow="Our staff"
+          eyebrowTone="dark"
           title={staff_preview.title}
           aside={
             <PillButton href="/staff" tone="dark">

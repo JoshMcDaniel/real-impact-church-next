@@ -43,10 +43,16 @@ type LatestSermonFeatureProps = {
   video: Video;
   /** Shows a "NEW" badge; decided at build time so server and browser match. */
   isNew: boolean;
+  /** Second button (defaults to jumping to the recent sermons on the Media page). */
+  moreHref?: string;
+  moreLabel?: string;
+  /** Section id and spacing for use outside the Media page (e.g. Home). */
+  id?: string;
+  sx?: object;
 };
 
 /** Dark feature card for the newest sermon (matches the subscribe card's style). */
-export const LatestSermonFeature = ({ video, isNew }: LatestSermonFeatureProps) => {
+export const LatestSermonFeature = ({ video, isNew, moreHref = '#recent-title', moreLabel = 'More Sermons', id, sx }: LatestSermonFeatureProps) => {
   const duration = formatDuration(video.duration);
   const durationWords = formatDurationWords(video.duration);
   const views = formatViews(video.viewCount);
@@ -54,7 +60,12 @@ export const LatestSermonFeature = ({ video, isNew }: LatestSermonFeatureProps) 
   const href = `/media/${video.id}`;
 
   return (
-    <Box component="section" aria-labelledby="latest-title" sx={{ maxWidth: contentMaxWidth, mx: 'auto', px: 3, pt: { xs: 7, md: 9 }, pb: 5 }}>
+    <Box
+      component="section"
+      id={id}
+      aria-labelledby="latest-title"
+      sx={{ maxWidth: contentMaxWidth, mx: 'auto', px: 3, pt: { xs: 7, md: 9 }, pb: 5, scrollMarginTop: '96px', ...sx }}
+    >
       <Box
         sx={{
           position: 'relative',
@@ -107,8 +118,8 @@ export const LatestSermonFeature = ({ video, isNew }: LatestSermonFeatureProps) 
             <PillButton href={href} startIcon={<PlayArrowIcon />} sx={{ minHeight: 56, px: { xs: '24px', sm: '30px' }, fontSize: 17 }}>
               Watch Now
             </PillButton>
-            <PillButton href="#recent-title" tone="ghost" sx={{ minHeight: 56 }}>
-              More Sermons
+            <PillButton href={moreHref} tone="ghost" sx={{ minHeight: 56 }}>
+              {moreLabel}
             </PillButton>
           </Box>
         </Box>

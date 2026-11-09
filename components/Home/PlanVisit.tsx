@@ -3,10 +3,11 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AddIcon from '@mui/icons-material/Add';
 import { brand, contentMaxWidth } from '../../constants/brand';
 import { useOrganizationConfig } from '../../constants/app-config/app-config-hooks';
 import PillButton from '../shared/PillButton';
+import PillLabel from '../shared/PillLabel';
 import { SectionHeader } from '../shared/SectionHeader';
 
 export type FaqItem = { question: string; answer: string };
@@ -97,7 +98,8 @@ export const PlanVisit = ({ faq }: PlanVisitProps) => {
       </Box>
 
       <Box sx={{ flex: '1 1 440px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '22px' }}>
-        <Typography component="h2" sx={{ m: 0, fontSize: 24, fontWeight: 800, color: brand.charcoal }}>
+        <PillLabel tone="dark">FAQ</PillLabel>
+        <Typography component="h2" sx={{ m: 0, fontSize: 'clamp(26px, 2.6vw, 34px)', fontWeight: 800, color: brand.charcoal, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
           Frequently asked questions
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -110,13 +112,36 @@ export const PlanVisit = ({ faq }: PlanVisitProps) => {
               sx={{
                 backgroundColor: brand.white,
                 border: `1px solid ${brand.line}`,
-                borderRadius: '16px !important',
+                borderRadius: '20px !important',
+                boxShadow: '0 10px 30px rgba(43,43,43,.05)',
                 '&::before': { display: 'none' },
               }}
             >
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                sx={{ px: 3, py: '6px', minHeight: 56, '& .MuiAccordionSummary-content': { my: '12px' } }}
+                expandIcon={<AddIcon sx={{ fontSize: 18 }} />}
+                sx={{
+                  px: 3,
+                  py: '6px',
+                  minHeight: 56,
+                  '& .MuiAccordionSummary-content': { my: '12px', mr: 2 },
+                  // Red + in a soft circle that turns into a filled × when open.
+                  '& .MuiAccordionSummary-expandIconWrapper': {
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    backgroundColor: brand.redTint,
+                    color: brand.red,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'transform .2s ease, background-color .2s ease',
+                  },
+                  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+                    transform: 'rotate(45deg)',
+                    backgroundColor: brand.red,
+                    color: brand.white,
+                  },
+                }}
               >
                 <Typography component="h3" sx={{ m: 0, fontSize: 17, fontWeight: 700, color: brand.charcoal }}>
                   {item.question}

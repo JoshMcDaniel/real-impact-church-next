@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { brand, contentMaxWidth } from '../../constants/brand';
 import { SundayItem } from '../../constants/sunday-schedule';
+import GlowLayer from '../shared/GlowLayer';
 import PillButton from '../shared/PillButton';
 import { Eyebrow } from '../shared/SectionHeader';
 import { PLAN_VISIT_HREF } from '../Layout/SiteHeader';
@@ -13,10 +14,11 @@ const splitTime = (time: string): [string, string] => {
 
 /** Dark band with the recurring Sunday morning schedule. */
 export const WeeklySchedule = ({ sundayMorning }: { sundayMorning: SundayItem[] }) => (
-  <Box component="section" aria-labelledby="weekly-title" sx={{ backgroundColor: brand.charcoal, color: brand.white, px: 3, py: { xs: 8, md: 11.25 } }}>
-    <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', display: 'flex', flexWrap: 'wrap', gap: 5, alignItems: 'center' }}>
+  <Box component="section" aria-labelledby="weekly-title" sx={{ position: 'relative', backgroundColor: brand.footer, color: brand.white, px: 3, py: { xs: 8, md: 11.25 } }}>
+    <GlowLayer glows={[{ right: -160, top: -200, size: 520, opacity: 0.16 }]} />
+    <Box sx={{ position: 'relative', maxWidth: contentMaxWidth, mx: 'auto', display: 'flex', flexWrap: 'wrap', gap: 5, alignItems: 'center' }}>
       <Box sx={{ flex: '1 1 340px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-        <Eyebrow color="#ff6b7f">Every week</Eyebrow>
+        <Eyebrow>Every week</Eyebrow>
         <Typography id="weekly-title" component="h2" sx={{ m: 0, fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: 800, lineHeight: 1.15 }}>
           Sunday mornings at Real Impact
         </Typography>
