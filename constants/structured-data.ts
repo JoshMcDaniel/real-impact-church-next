@@ -1,6 +1,7 @@
 import appConfig from './app-config/config.json';
 import { absoluteUrl, siteUrl } from './site';
 import { FaqItem } from '../components/Home/PlanVisit';
+import { Event } from './Event';
 
 const org = appConfig.organization;
 
@@ -52,3 +53,39 @@ export const breadcrumbJsonLd = (crumbs: { name: string; path: string }[]) => ({
     item: absoluteUrl(crumb.path),
   })),
 });
+
+/** schema.org Event data so events can appear in Google's event results. */
+export const eventJsonLd = (event: Event) => {
+  const loc = event.location;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: event.name,
+    ...(event.summary && { description: event.summary }),
+    startDate: event.startTime,
+    endDate: event.endTime,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    image: [absoluteUrl(event.imageUrl(1200))],
+    url: absoluteUrl(event.href),
+    location: {
+      '@type': 'Place',
+      name: loc.name,
+      address: loc.isChurch
+        ? {
+            '@type': 'PostalAddress',
+            streetAddress: org.contact.street.replace(/\.$/, ''),
+            addressLocality: org.contact.city,
+            addressRegion: org.contact.state,
+            postalCode: org.contact.zip_code,
+            addressCountry: 'US',
+          }
+        : loc.full,
+    },
+    organizer: {
+      '@type': 'Organization',
+      name: org.full_name,
+      url: absoluteUrl('/'),
+    },
+  };
+};

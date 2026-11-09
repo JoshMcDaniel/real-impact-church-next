@@ -14,7 +14,7 @@ import WhatToExpect from '../components/Home/WhatToExpect';
 import appConfig from '../constants/app-config/config.json';
 import { useHomeConfig } from '../constants/app-config/app-config-hooks';
 import { brand } from '../constants/brand';
-import { EventType } from '../constants/Event';
+import { EVENT_FIELDS, EventType, UPCOMING_FILTER } from '../constants/Event';
 import { LatestVideo, Service } from '../constants/Service';
 import {
   getPrimaryService,
@@ -126,16 +126,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       tags: ['service'],
     }),
     sanityFetch<EventType[]>({
-      query: groq`*[_type == "events" && defined(slug.current) && coalesce(endDateTime, startDateTime) >= now()]
-        | order(startDateTime asc)[0...3] {
-        _id,
-        name,
-        "slug": slug.current,
-        image,
-        startDateTime,
-        endDateTime,
-        summary
-      }`,
+      query: groq`*[${UPCOMING_FILTER}] | order(startDateTime asc)[0...3] { ${EVENT_FIELDS} }`,
       tags: ['events'],
     }),
     fetchLatestVideo(),

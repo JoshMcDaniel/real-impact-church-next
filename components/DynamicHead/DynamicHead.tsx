@@ -15,6 +15,8 @@ type Props = {
   imageAlt?: string;
   /** JSON-LD structured data objects to embed in the page. */
   jsonLd?: object[];
+  /** Ask search engines not to index this page (e.g. past events). */
+  noindex?: boolean;
 };
 
 const DEFAULT_SHARE_IMAGE = '/images/revival.jpg';
@@ -34,6 +36,7 @@ const DynamicHead = (props: Props) => {
       <title>{title}</title>
       <meta name="description" content={props.description} />
       {canonical && <link rel="canonical" href={canonical} />}
+      {props.noindex && <meta name="robots" content="noindex" />}
 
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content={organizationConfig.full_name} />

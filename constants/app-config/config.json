@@ -614,8 +614,17 @@
     },
     "events": {
       "header": {
-        "title": "Events",
-        "description": "See the events we have planned at Real Impact Church."
+        "title": "Upcoming Events | Real Impact Church in Eustis, FL",
+        "description": "See upcoming events at Real Impact Church in Eustis, Florida: gatherings, celebrations and ways to get involved. Everyone is welcome."
+      },
+      "hero": {
+        "eyebrow": "Events",
+        "title": "Upcoming events at Real Impact Church",
+        "text": "Gatherings, celebrations and ways to get involved in Eustis, Florida. Everyone is welcome.",
+        "image": {
+          "path": "/images/home/events.webp",
+          "description": "Calendar and planner on a desk"
+        }
       },
       "header_text": "Events",
       "routes": {

@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { groq } from 'next-sanity';
+import { UPCOMING_FILTER } from '../constants/Event';
 import { siteUrl } from '../constants/site';
 import { sanityFetch } from '../src/sanity/lib/client';
 
@@ -15,7 +16,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   let eventSlugs: string[] = [];
   try {
     eventSlugs = await sanityFetch<string[]>({
-      query: groq`*[_type == "events" && defined(slug.current)].slug.current`,
+      // Only upcoming events: past event pages are marked noindex.
+      query: groq`*[${UPCOMING_FILTER}].slug.current`,
       tags: ['events'],
     });
   } catch {
