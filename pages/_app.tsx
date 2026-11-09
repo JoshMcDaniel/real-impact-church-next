@@ -8,8 +8,6 @@ import SiteHeader from '../components/Layout/SiteHeader';
 import SiteFooter from '../components/Layout/SiteFooter';
 
 // Self-hosted from the repo (variable font, latin subset, weights 400-800).
-// Uses next/font/local rather than next/font/google so the build never has to
-// fetch from Google Fonts, which made Vercel builds fail intermittently.
 const montserrat = localFont({
   src: '../styles/fonts/Montserrat-latin-variable.woff2',
   weight: '400 800',
