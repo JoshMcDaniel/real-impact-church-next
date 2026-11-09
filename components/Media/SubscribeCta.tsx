@@ -76,12 +76,19 @@ export const SubscribeCta = ({ videos }: { videos: Video[] }) => {
               position: 'relative',
               flex: '1 1 360px',
               minWidth: 0,
-              px: 'clamp(24px, 4vw, 48px)',
-              pb: 'clamp(32px, 4vw, 48px)',
+              mx: 'clamp(24px, 4vw, 48px)',
+              mb: 'clamp(32px, 4vw, 48px)',
             }}
           >
-            {/* Fixed proportions and a max width keep the fan compact when the card stacks. */}
-            <Box sx={{ position: 'relative', width: '100%', maxWidth: 460, aspectRatio: '460 / 330', mx: 'auto' }}>
+            {/* Side by side: fill the column. Stacked (narrow screens): keep the fan compact and centered. */}
+            <Box
+              sx={{
+                position: 'relative',
+                width: '100%',
+                height: 320,
+                '@media (max-width: 860px)': { height: 'auto', maxWidth: 460, aspectRatio: '460 / 330', mx: 'auto' },
+              }}
+            >
             {thumbs.map((video, index) => {
               const pos = stack[index];
               return (
