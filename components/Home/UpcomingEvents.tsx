@@ -4,11 +4,11 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { brand, contentMaxWidth } from '../../constants/brand';
 import { Event, EventType } from '../../constants/Event';
+import { formatChurchDate } from '../../constants/date-time';
 import { SundayItem } from '../../constants/sunday-schedule';
 import {
   useMediaConfig,
@@ -19,7 +19,7 @@ import SectionHeader from '../shared/SectionHeader';
 import { PLAN_VISIT_HREF } from '../Layout/SiteHeader';
 
 const EventCard = ({ event }: { event: Event }) => {
-  const start = event.startTime ? dayjs(event.startTime) : null;
+  const start = event.startTime || null;
   return (
     <Box
       component={Link}
@@ -54,10 +54,10 @@ const EventCard = ({ event }: { event: Event }) => {
               }}
             >
               <Typography component="p" sx={{ m: 0, fontSize: 12, fontWeight: 800, color: brand.red, letterSpacing: '.1em' }}>
-                {start.format('MMM').toUpperCase()}
+                {formatChurchDate(start, { month: 'short' }).toUpperCase()}
               </Typography>
               <Typography component="p" sx={{ m: 0, fontSize: 24, fontWeight: 800, color: brand.charcoal, lineHeight: 1.1 }}>
-                {start.format('D')}
+                {formatChurchDate(start, { day: 'numeric' })}
               </Typography>
             </Box>
           )}
@@ -68,7 +68,8 @@ const EventCard = ({ event }: { event: Event }) => {
           </Typography>
           {start && (
             <Typography component="p" sx={{ m: 0, fontSize: 14, fontWeight: 600, color: brand.muted }}>
-              <time dateTime={event.startTime}>{start.format('dddd · h:mm A')}</time>
+              <time dateTime={event.startTime}>{formatChurchDate(start, { weekday: 'long' })} ·{' '}
+                {formatChurchDate(start, { hour: 'numeric', minute: '2-digit' })}</time>
             </Typography>
           )}
           {event.summary && (

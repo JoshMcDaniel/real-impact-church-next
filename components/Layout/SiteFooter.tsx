@@ -178,7 +178,8 @@ export const SiteFooter = () => {
             color: '#a7adb1',
           }}
         >
-          <Typography component="p" sx={{ m: 0, fontSize: 13 }}>
+          {/* The year can differ between build time and viewing time around New Year's. */}
+          <Typography component="p" sx={{ m: 0, fontSize: 13 }} suppressHydrationWarning>
             © {new Date().getFullYear()} {org.full_name} · Registered {org.registration_year}
           </Typography>
         </Box>
