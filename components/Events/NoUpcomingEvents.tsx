@@ -71,6 +71,7 @@ export const NoUpcomingEvents = ({ sundayMorning }: { sundayMorning: SundayItem[
                   rel="noopener"
                   aria-label={`Follow ${full_name} on ${label}`}
                   sx={{
+                    flex: 'none',
                     width: 44,
                     height: 44,
                     borderRadius: '50%',

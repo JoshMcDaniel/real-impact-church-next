@@ -126,6 +126,7 @@ export const PlanVisit = ({ faq }: PlanVisitProps) => {
                   '& .MuiAccordionSummary-content': { my: '12px', mr: 2 },
                   // Red + in a soft circle that turns into a filled × when open.
                   '& .MuiAccordionSummary-expandIconWrapper': {
+                    flex: 'none',
                     width: 32,
                     height: 32,
                     borderRadius: '50%',

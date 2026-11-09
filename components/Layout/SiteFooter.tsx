@@ -109,6 +109,7 @@ export const SiteFooter = () => {
                     rel="noopener"
                     aria-label={`${org.full_name} on ${meta.label}`}
                     sx={{
+                      flex: 'none',
                       width: 44,
                       height: 44,
                       borderRadius: '50%',
