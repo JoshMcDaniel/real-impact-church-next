@@ -618,12 +618,16 @@
     },
     "staff": {
       "header": {
-        "title": "Staff",
-        "description": "Meet our loving staff at Real Impact Church."
+        "title": "Our Staff | Real Impact Church in Eustis, FL",
+        "description": "Meet the staff of Real Impact Church in Eustis, Florida — the people who help make our church feel like family."
       },
-      "header_text": "Real Impact Staff",
-      "routes": {
-        "get_all_staff": "https://data.mongodb-api.com/app/real-impact-church-qdvgb/endpoint/personnel/staff/getAllStaff"
+      "hero": {
+        "title": "Meet our staff",
+        "text": "The people who help make Real Impact Church feel like family.",
+        "image": {
+          "path": "/images/real_impact_church_about_intro.jpg",
+          "description": "Members of Real Impact Church gathered together in worship"
+        }
       }
     },
     "events": {
