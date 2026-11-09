@@ -76,8 +76,8 @@ export const FeaturedEvent = ({ event }: { event: Event }) => (
         <PillButton href={event.href} size="small">
           Event Details
         </PillButton>
+        <AddToCalendar event={event} />
       </Box>
-      <AddToCalendar event={event} />
     </Box>
   </Box>
 );

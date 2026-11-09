@@ -1,31 +1,39 @@
-import Box from '@mui/material/Box';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
+import { MouseEvent } from 'react';
 import { Event } from '../../constants/Event';
 import { googleCalendarUrl, icsDataUrl } from '../../constants/event-calendar';
 import PillButton from '../shared/PillButton';
 
-/** "Google Calendar" and "Apple / Outlook" (.ics download) buttons. */
-export const AddToCalendar = ({ event, size = 'small' }: { event: Event; size?: 'small' | 'medium' }) => (
-  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-    <PillButton
-      href={googleCalendarUrl(event)}
-      size={size}
-      startIcon={<EventAvailableOutlinedIcon />}
-      target="_blank"
-      aria-label={`Add ${event.name} to Google Calendar (opens in a new tab)`}
-    >
-      Google Calendar
-    </PillButton>
+/**
+ * One "Add to Calendar" button.
+ * - By default it downloads an .ics file, which opens in Apple Calendar (iPhone, Mac),
+ *   Outlook and most calendar apps.
+ * - On Android, where .ics files aren't handled reliably, it opens Google Calendar
+ *   with the event filled in instead.
+ * The server always renders the .ics link; the Android switch happens on click,
+ * so server and browser render the same markup.
+ */
+export const AddToCalendar = ({ event, size = 'small' }: { event: Event; size?: 'small' | 'medium' }) => {
+  const handleClick = (e: MouseEvent) => {
+    if (/Android/i.test(navigator.userAgent)) {
+      e.preventDefault();
+      window.open(googleCalendarUrl(event), '_blank', 'noopener');
+    }
+  };
+
+  return (
     <PillButton
       href={icsDataUrl(event)}
+      download={`${event.route}.ics`}
       size={size}
       tone="outline"
-      download={`${event.route}.ics`}
-      aria-label={`Download ${event.name} for Apple Calendar or Outlook`}
+      startIcon={<EventAvailableOutlinedIcon />}
+      onClick={handleClick}
+      aria-label={`Add ${event.name} to your calendar`}
     >
-      Apple / Outlook
+      Add to Calendar
     </PillButton>
-  </Box>
-);
+  );
+};
 
 export default AddToCalendar;
