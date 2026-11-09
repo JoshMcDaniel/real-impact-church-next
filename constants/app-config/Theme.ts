@@ -3,7 +3,7 @@ import themeConfig from './theme.json';
 
 /**
  * The custom application theme.
- * Montserrat is loaded with next/font in `_app.tsx` and exposed as `--font-montserrat`.
+ * Montserrat is self-hosted with next/font/local in `_app.tsx` and exposed as `--font-montserrat`.
  */
 export const theme = createTheme({
   ...(themeConfig as ThemeOptions),
