@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { brand } from '../../constants/brand';
 
 /** Light gray pill with a small red icon (date, length, views). */
-export const MetaChip = ({ icon, children }: { icon: ReactNode; children: ReactNode }) => (
+export const MetaChip = ({ icon, children, large = false }: { icon: ReactNode; children: ReactNode; large?: boolean }) => (
   <Box
     component="span"
     sx={{
@@ -13,9 +13,9 @@ export const MetaChip = ({ icon, children }: { icon: ReactNode; children: ReactN
       gap: '6px',
       backgroundColor: brand.mist,
       borderRadius: '999px',
-      px: '10px',
-      py: '5px',
-      fontSize: 13,
+      px: large ? '12px' : '10px',
+      py: large ? '6px' : '5px',
+      fontSize: large ? 14 : 13,
       fontWeight: 600,
       color: brand.charcoal,
       whiteSpace: 'nowrap',

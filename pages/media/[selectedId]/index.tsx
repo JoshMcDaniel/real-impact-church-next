@@ -1,25 +1,34 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import YouTubeIcon from '@mui/icons-material/YouTube';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { groq } from 'next-sanity';
 import Link from 'next/link';
 import DynamicHead from '../../../components/DynamicHead/DynamicHead';
 import CopyLinkButton from '../../../components/Media/CopyLinkButton';
 import LinkifiedText from '../../../components/Media/LinkifiedText';
 import LitePlayer from '../../../components/Media/LitePlayer';
-import VideoCard from '../../../components/Media/VideoCard';
+import SermonCard from '../../../components/Media/SermonCard';
+import { MetaChip } from '../../../components/Media/SermonParts';
 import PillButton from '../../../components/shared/PillButton';
+import PillLabel from '../../../components/shared/PillLabel';
 import { PLAN_VISIT_HREF } from '../../../components/Layout/SiteHeader';
 import { brand, contentMaxWidth } from '../../../constants/brand';
+import { Service } from '../../../constants/Service';
 import { absoluteUrl } from '../../../constants/site';
 import { breadcrumbJsonLd, videoJsonLd } from '../../../constants/structured-data';
+import { getPrimaryService, getSundayMorning } from '../../../constants/sunday-schedule';
 import { formatDurationWords, formatVideoDate, formatViews, Video, watchUrl } from '../../../constants/video';
 import { getRecentVideos, getVideo } from '../../../constants/youtube';
+import { sanityFetch } from '../../../src/sanity/lib/client';
 
 type SelectedMediaProps = {
   video: Video;
   moreVideos: Video[];
+  services: Service[];
 };
 
 /** Meta description: the start of the YouTube description, or a sensible default. */
@@ -29,13 +38,19 @@ const metaDescription = (video: Video) => {
   return text.length > 155 ? `${text.slice(0, 155).replace(/\s+\S*$/, '')}…` : text;
 };
 
-const SelectedMedia = ({ video, moreVideos }: SelectedMediaProps) => {
+/** "9:00 AM" + "Free Breakfast" -> "9:00 Breakfast" */
+const scheduleLabel = (time: string, title: string) =>
+  `${time.replace(/\s?[AP]\.?M\.?$/i, '')} ${title.replace(/^Free /, '').replace(/ Service$/, '')}`;
+
+const Glow = ({ sx }: { sx: object }) => (
+  <Box aria-hidden sx={{ position: 'absolute', borderRadius: '50%', backgroundColor: brand.red, ...sx }} />
+);
+
+const SelectedMedia = ({ video, moreVideos, services }: SelectedMediaProps) => {
   const path = `/media/${video.id}`;
-  const meta = [
-    formatVideoDate(video.publishedAt),
-    formatDurationWords(video.duration),
-    formatViews(video.viewCount),
-  ].filter(Boolean) as string[];
+  const durationWords = formatDurationWords(video.duration);
+  const views = formatViews(video.viewCount);
+  const sundayMorning = getSundayMorning(getPrimaryService(services));
 
   return (
     <Box sx={{ backgroundColor: brand.paper, color: brand.text }}>
@@ -53,8 +68,15 @@ const SelectedMedia = ({ video, moreVideos }: SelectedMediaProps) => {
         ]}
       />
       <Box component="main">
-        <Box component="section" aria-label="Video player" sx={{ backgroundColor: brand.footer, px: 3, pt: 4, pb: 5 }}>
-          <Box sx={{ maxWidth: 1100, mx: 'auto', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+        {/* Player */}
+        <Box
+          component="section"
+          aria-label="Video player"
+          sx={{ position: 'relative', overflow: 'hidden', backgroundColor: brand.footer, px: 3, pt: 4, pb: 7 }}
+        >
+          <Glow sx={{ right: -160, top: -200, width: 520, height: 520, opacity: 0.16 }} />
+          <Glow sx={{ left: -180, bottom: -260, width: 480, height: 480, opacity: 0.1 }} />
+          <Box sx={{ position: 'relative', maxWidth: 1100, mx: 'auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <Box component="nav" aria-label="Breadcrumb" sx={{ fontSize: 14, fontWeight: 600, color: '#b4babe' }}>
               <Box component={Link} href="/media" sx={{ color: brand.white, textDecoration: 'underline', textUnderlineOffset: '3px' }}>
                 Sermons
@@ -68,27 +90,36 @@ const SelectedMedia = ({ video, moreVideos }: SelectedMediaProps) => {
           </Box>
         </Box>
 
+        {/* Details + Watch & share */}
         <Box
           component="section"
           aria-label="Sermon details"
-          sx={{ maxWidth: 1100, mx: 'auto', px: 3, pt: 6, pb: { xs: 8, md: 10 }, display: 'flex', flexWrap: 'wrap', gap: 5, alignItems: 'flex-start' }}
+          sx={{ maxWidth: 1100, mx: 'auto', px: 3, pt: 6, pb: { xs: 8, md: 11.25 }, display: 'flex', flexWrap: 'wrap', gap: 5, alignItems: 'flex-start' }}
         >
-          <Box component="article" sx={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Typography component="h1" sx={{ m: 0, fontSize: 'clamp(28px, 3.4vw, 42px)', fontWeight: 800, color: brand.charcoal, lineHeight: 1.15 }}>
+          <Box component="article" sx={{ flex: '999 1 560px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <PillLabel>Sermon</PillLabel>
+            <Typography component="h1" sx={{ m: 0, fontSize: 'clamp(30px, 3.8vw, 46px)', fontWeight: 800, color: brand.charcoal, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
               {video.title}
             </Typography>
-            {meta.length > 0 && (
-              <Typography component="p" sx={{ m: 0, display: 'flex', flexWrap: 'wrap', gap: '6px 16px', fontSize: 15, fontWeight: 600, color: brand.muted }}>
-                {meta.map((item, index) => (
-                  <Box component="span" key={item} sx={{ display: 'inline-flex', gap: 2 }}>
-                    {index > 0 && <span aria-hidden>·</span>}
-                    {index === 0 ? <time dateTime={video.publishedAt}>{item}</time> : item}
-                  </Box>
-                ))}
-              </Typography>
-            )}
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {video.publishedAt && (
+                <MetaChip large icon={<CalendarTodayOutlinedIcon />}>
+                  <time dateTime={video.publishedAt}>{formatVideoDate(video.publishedAt)}</time>
+                </MetaChip>
+              )}
+              {durationWords && (
+                <MetaChip large icon={<AccessTimeIcon />}>
+                  {durationWords}
+                </MetaChip>
+              )}
+              {views && (
+                <MetaChip large icon={<VisibilityOutlinedIcon />}>
+                  {views}
+                </MetaChip>
+              )}
+            </Box>
             {video.description.trim() && (
-              <Typography component="p" sx={{ m: 0, fontSize: 17, lineHeight: 1.8, whiteSpace: 'pre-line' }}>
+              <Typography component="p" sx={{ m: '6px 0 0', fontSize: 17, lineHeight: 1.8, whiteSpace: 'pre-line' }}>
                 <LinkifiedText text={video.description.trim()} />
               </Typography>
             )}
@@ -96,50 +127,86 @@ const SelectedMedia = ({ video, moreVideos }: SelectedMediaProps) => {
 
           <Box
             component="aside"
-            aria-label="Watch and share"
+            aria-labelledby="share-title"
             sx={{
-              flex: '1 1 280px',
+              position: 'relative',
+              overflow: 'hidden',
+              flex: '1 1 300px',
               minWidth: 0,
-              backgroundColor: brand.white,
-              border: `1px solid ${brand.line}`,
-              borderRadius: '20px',
-              p: 3,
+              backgroundColor: brand.footer,
+              color: brand.white,
+              borderRadius: '24px',
+              p: '28px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
+              gap: '14px',
             }}
           >
-            <Typography component="h2" sx={{ m: 0, fontSize: 13, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: brand.muted }}>
+            <Glow sx={{ right: -90, top: -90, width: 220, height: 220, opacity: 0.18 }} />
+            <Typography id="share-title" component="h2" sx={{ position: 'relative', m: 0, fontSize: 22, fontWeight: 800 }}>
               Watch &amp; share
             </Typography>
-            <PillButton href={watchUrl(video.id)} size="small" startIcon={<YouTubeIcon />}>
-              Watch on YouTube
-            </PillButton>
-            <CopyLinkButton url={absoluteUrl(path)} />
-            <Typography component="p" sx={{ m: '6px 0 0', fontSize: 14, lineHeight: 1.6 }}>
-              Want to hear it in person?{' '}
-              <Box component={Link} href={PLAN_VISIT_HREF} sx={{ color: brand.red, fontWeight: 700 }}>
-                Join us this Sunday
-              </Box>
-              .
+            <Typography component="p" sx={{ position: 'relative', m: 0, fontSize: 15, lineHeight: 1.6, color: '#d6dadd' }}>
+              Pass this message along to someone who needs to hear it.
             </Typography>
+            {/* Side by side when the card is wide (stacked layout), stacked when it's a narrow column. */}
+            <Box sx={{ position: 'relative', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              <PillButton href={watchUrl(video.id)} sx={{ flex: '1 1 190px', maxWidth: 260, minHeight: 48, fontSize: 15 }}>
+                Watch on YouTube
+              </PillButton>
+              <CopyLinkButton url={absoluteUrl(path)} onDark sx={{ flex: '1 1 190px', maxWidth: 260 }} />
+            </Box>
+            <Box sx={{ position: 'relative', mt: '6px', pt: '18px', borderTop: '1px solid rgba(255,255,255,.18)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <Typography component="p" sx={{ m: 0, fontSize: 15, fontWeight: 700 }}>
+                Hear it in person this Sunday
+              </Typography>
+              <Box component="ul" aria-label="Sunday schedule" sx={{ listStyle: 'none', m: 0, p: 0, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {sundayMorning.map((item) => {
+                  const highlight = item.key === 'worship';
+                  return (
+                    <Box
+                      component="li"
+                      key={item.key}
+                      sx={{
+                        backgroundColor: highlight ? brand.white : 'rgba(255,255,255,.12)',
+                        color: highlight ? brand.charcoal : brand.white,
+                        borderRadius: '999px',
+                        px: '12px',
+                        py: '6px',
+                        fontSize: 13,
+                        fontWeight: highlight ? 800 : 700,
+                      }}
+                    >
+                      {scheduleLabel(item.time, item.title)}
+                    </Box>
+                  );
+                })}
+              </Box>
+              <Box
+                component={Link}
+                href={PLAN_VISIT_HREF}
+                sx={{ color: '#ff8a9a', fontWeight: 700, fontSize: 15, minHeight: 32, display: 'inline-flex', alignItems: 'center', width: 'fit-content', textDecoration: 'none', '&:hover': { color: brand.white } }}
+              >
+                Plan your visit →
+              </Box>
+            </Box>
           </Box>
         </Box>
 
+        {/* More sermons */}
         {moreVideos.length > 0 && (
-          <Box component="section" aria-labelledby="more-sermons-title" sx={{ backgroundColor: brand.mist, px: 3, py: { xs: 8, md: 10 } }}>
-            <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', display: 'flex', flexDirection: 'column', gap: 3.5 }}>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 2 }}>
-                <Typography id="more-sermons-title" component="h2" sx={{ m: 0, fontSize: 'clamp(26px, 2.6vw, 34px)', fontWeight: 800, color: brand.charcoal }}>
-                  More sermons
-                </Typography>
-                <Box
-                  component={Link}
-                  href="/media"
-                  sx={{ fontWeight: 700, fontSize: 16, display: 'inline-flex', alignItems: 'center', gap: 1, minHeight: 44, color: brand.red, textDecoration: 'none' }}
-                >
-                  All sermons <ArrowForwardIcon fontSize="small" />
+          <Box component="section" aria-labelledby="more-sermons-title" sx={{ backgroundColor: brand.mist, px: 3, py: { xs: 8, md: 11.25 } }}>
+            <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '18px' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <PillLabel tone="dark">More sermons</PillLabel>
+                  <Typography id="more-sermons-title" component="h2" sx={{ m: 0, fontSize: 'clamp(30px, 3.4vw, 44px)', fontWeight: 800, color: brand.charcoal, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+                    Keep watching
+                  </Typography>
                 </Box>
+                <PillButton href="/media" tone="outline" endIcon={<ArrowForwardIcon />}>
+                  All sermons
+                </PillButton>
               </Box>
               <Box
                 sx={{
@@ -149,7 +216,7 @@ const SelectedMedia = ({ video, moreVideos }: SelectedMediaProps) => {
                 }}
               >
                 {moreVideos.map((v) => (
-                  <VideoCard key={v.id} video={v} />
+                  <SermonCard key={v.id} video={v} />
                 ))}
               </Box>
             </Box>
@@ -173,13 +240,21 @@ export const getStaticProps: GetStaticProps<SelectedMediaProps> = async (context
   const id = context.params?.selectedId;
   if (typeof id !== 'string') return { notFound: true, revalidate: 300 };
 
-  const [video, recent] = await Promise.all([getVideo(id), getRecentVideos(4)]);
+  const [video, recent, services] = await Promise.all([
+    getVideo(id),
+    getRecentVideos(4),
+    sanityFetch<Service[]>({
+      query: groq`*[_type == "service"] | order(displayOrder asc) { title, dayOfWeek, time, description }`,
+      tags: ['service'],
+    }),
+  ]);
   if (!video) return { notFound: true, revalidate: 300 };
 
   return {
     props: {
       video,
       moreVideos: recent.filter((v) => v.id !== id).slice(0, 3),
+      services: services ?? [],
     },
     // Daily is plenty for titles/descriptions and keeps API use tiny.
     revalidate: 86400,

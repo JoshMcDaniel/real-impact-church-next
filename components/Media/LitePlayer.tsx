@@ -13,7 +13,18 @@ export const LitePlayer = ({ video }: { video: Video }) => {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', borderRadius: '20px', overflow: 'hidden', backgroundColor: '#000' }}>
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        aspectRatio: '16 / 9',
+        borderRadius: '22px',
+        overflow: 'hidden',
+        backgroundColor: '#000',
+        border: `3px solid ${brand.white}`,
+        boxShadow: '0 30px 70px rgba(0,0,0,.55)',
+      }}
+    >
       {playing ? (
         <Box
           component="iframe"
@@ -51,8 +62,8 @@ export const LitePlayer = ({ video }: { video: Video }) => {
               top: '50%',
               transform: 'translate(-50%, -50%)',
               width: { xs: 72, sm: 96 },
-              height: { xs: 72, sm: 96 },
-              borderRadius: '50%',
+              height: { xs: 50, sm: 66 },
+              borderRadius: { xs: '14px', sm: '18px' },
               backgroundColor: brand.red,
               color: brand.white,
               display: 'flex',

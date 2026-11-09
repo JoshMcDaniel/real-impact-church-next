@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { brand } from '../../constants/brand';
 
 /** Copies a URL to the clipboard and briefly confirms it. */
-export const CopyLinkButton = ({ url }: { url: string }) => {
+export const CopyLinkButton = ({ url, onDark = false, sx }: { url: string; onDark?: boolean; sx?: object }) => {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -24,15 +24,18 @@ export const CopyLinkButton = ({ url }: { url: string }) => {
       startIcon={copied ? <CheckIcon /> : <LinkIcon />}
       aria-live="polite"
       sx={{
-        minHeight: 44,
+        minHeight: 48,
         px: '18px',
         borderRadius: '999px',
-        border: `2px solid ${brand.charcoal}`,
-        color: brand.charcoal,
+        border: `2px solid ${onDark ? 'rgba(255,255,255,.85)' : brand.charcoal}`,
+        color: onDark ? brand.white : brand.charcoal,
         fontWeight: 700,
-        fontSize: 14,
+        fontSize: 15,
         textTransform: 'none',
-        '&:hover': { backgroundColor: brand.charcoal, color: brand.white },
+        '&:hover': onDark
+          ? { backgroundColor: brand.white, color: brand.charcoal }
+          : { backgroundColor: brand.charcoal, color: brand.white },
+        ...sx,
       }}
     >
       {copied ? 'Link copied' : 'Copy Link'}
