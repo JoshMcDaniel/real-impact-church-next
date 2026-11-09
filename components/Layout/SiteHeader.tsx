@@ -12,8 +12,8 @@ import { brand, contentMaxWidth } from '../../constants/brand';
 import { useOrganizationConfig } from '../../constants/app-config/app-config-hooks';
 import PillButton from '../shared/PillButton';
 
-export const navItems = [
-  { label: 'About', href: '/about' },
+export const navItems: { label: string; href: string; also?: string[] }[] = [
+  { label: 'About', href: '/about', also: ['/beliefs', '/staff'] },
   { label: 'Media', href: '/media' },
   { label: 'Events', href: '/events' },
   { label: 'Giving', href: '/giving' },
@@ -43,8 +43,12 @@ export const SiteHeader = () => {
     };
   }, [router.events]);
 
-  const isActive = (href: string) =>
-    router.pathname === href || router.pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => {
+    const item = navItems.find((nav) => nav.href === href);
+    return [href, ...(item?.also ?? [])].some(
+      (path) => router.pathname === path || router.pathname.startsWith(`${path}/`)
+    );
+  };
 
   return (
     <Box
@@ -139,7 +143,7 @@ export const SiteHeader = () => {
               key={item.href}
               component={Link}
               href={item.href}
-              aria-current={isActive(item.href) ? 'page' : undefined}
+              aria-current={router.pathname === item.href ? 'page' : undefined}
               sx={{
                 color: isActive(item.href) ? brand.red : brand.charcoal,
                 fontWeight: 600,
@@ -196,7 +200,7 @@ export const SiteHeader = () => {
               key={item.href}
               component={Link}
               href={item.href}
-              aria-current={isActive(item.href) ? 'page' : undefined}
+              aria-current={router.pathname === item.href ? 'page' : undefined}
               sx={{
                 display: 'flex',
                 alignItems: 'center',

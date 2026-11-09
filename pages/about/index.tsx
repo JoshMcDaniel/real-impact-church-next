@@ -1,79 +1,74 @@
-import { Box, Paper, useMediaQuery, useTheme } from '@mui/material';
-import React, { Fragment, useState } from 'react';
-import AboutDescription, {
-  AboutDescriptionContainer,
-} from '../../components/About/AboutDescription';
+import Box from '@mui/material/Box';
+import { GetStaticProps } from 'next';
+import { groq } from 'next-sanity';
+import BeliefsPreview from '../../components/About/BeliefsPreview';
+import MissionVision from '../../components/About/MissionVision';
+import StaffPreview, { StaffPreviewPerson } from '../../components/About/StaffPreview';
+import WhoWeAre from '../../components/About/WhoWeAre';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
-import NavTile, { NavTileProps } from '../../components/shared/NavTile';
-import SectionIntroImage from '../../components/shared/SectionIntroImage';
+import PageHero from '../../components/shared/PageHero';
+import SeatSavedCta from '../../components/shared/SeatSavedCta';
+import appConfig from '../../constants/app-config/config.json';
 import { useAboutConfig } from '../../constants/app-config/app-config-hooks';
+import { brand } from '../../constants/brand';
+import { Service } from '../../constants/Service';
+import { breadcrumbJsonLd } from '../../constants/structured-data';
+import { getPrimaryService, getSundayMorning } from '../../constants/sunday-schedule';
+import { sanityFetch } from '../../src/sanity/lib/client';
 
-export const About = () => {
+type AboutProps = {
+  services: Service[];
+  staff: StaffPreviewPerson[];
+};
+
+export const About = ({ services, staff }: AboutProps) => {
   const aboutConfig = useAboutConfig();
-  const aboutDescription: AboutDescriptionContainer =
-    aboutConfig.about_description;
-  const primaryText = aboutConfig.intro_section.text.primary;
-  const subText = aboutConfig.intro_section.text.sub;
-  const imagePath = aboutConfig.intro_section.images.intro_image.path;
-  const tiles: NavTileProps[] = aboutConfig.nav_tiles.tiles;
-
-  const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
+  const sundayMorning = getSundayMorning(getPrimaryService(services));
 
   return (
-    <Fragment>
+    <Box sx={{ backgroundColor: brand.paper, color: brand.text }}>
       <DynamicHead
-        title={aboutConfig.header.title}
+        fullTitle={aboutConfig.header.title}
         description={aboutConfig.header.description}
+        image={aboutConfig.hero.image.path}
+        imageAlt={aboutConfig.hero.image.description}
+        jsonLd={[breadcrumbJsonLd([{ name: 'About', path: '/about' }])]}
       />
-      <Box component="section">
-        <SectionIntroImage
-          imagePath={imagePath}
-          primaryText={primaryText}
-          subText={subText}
+      <Box component="main">
+        <PageHero
+          eyebrow={aboutConfig.hero.eyebrow}
+          title={aboutConfig.hero.title}
+          text={aboutConfig.hero.text}
+          image={aboutConfig.hero.image}
         />
-        <Box
-          component={'main'}
-          sx={{
-            display: 'grid',
-            padding: isMediumView ? '2rem 4rem' : '2rem',
-            gap: '2rem',
-            justifyItems: 'center',
-          }}
-        >
-          <Box display="grid" rowGap="1rem">
-            {aboutDescription.descriptions.map((item, index) => (
-              <AboutDescription
-                key={index}
-                title_text={item.title_text}
-                description={item.description}
-              />
-            ))}
-          </Box>
-        </Box>
-        <Paper
-          sx={{
-            padding: isMediumView ? '2rem' : '2rem 1rem',
-            display: 'grid',
-            gridAutoFlow: isMediumView ? 'column' : 'row',
-            gap: '2rem',
-            justifyContent: 'space-evenly',
-            width: '100%',
-          }}
-          component="section"
-        >
-          {tiles.map((tile, index) => (
-            <NavTile
-              key={index}
-              title={tile.title}
-              summary={tile.summary}
-              link_text={tile.link_text}
-              route={tile.route}
-            />
-          ))}
-        </Paper>
+        <WhoWeAre sundayMorning={sundayMorning} />
+        <MissionVision />
+        <BeliefsPreview />
+        <StaffPreview staff={staff} />
+        <SeatSavedCta sundayMorning={sundayMorning} />
       </Box>
-    </Fragment>
+    </Box>
   );
+};
+
+export const getStaticProps: GetStaticProps<AboutProps> = async () => {
+  const count = appConfig.website.about.staff_preview.count;
+  const [services, staff] = await Promise.all([
+    sanityFetch<Service[]>({
+      query: groq`*[_type == "service"] | order(displayOrder asc) { title, dayOfWeek, time, description }`,
+      tags: ['service'],
+    }),
+    sanityFetch<StaffPreviewPerson[]>({
+      query: groq`*[_type == "staff"] | order(displayOrder asc)[0...$count] { _id, name, position, image }`,
+      qParams: { count },
+      tags: ['staff'],
+    }),
+  ]);
+
+  return {
+    props: { services: services ?? [], staff: staff ?? [] },
+    revalidate: 900,
+  };
 };
 
 export default About;

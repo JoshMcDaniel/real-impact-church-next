@@ -16,6 +16,15 @@ html {
   }
 }
 
+h1,
+h2,
+h3,
+h4,
+p,
+a {
+  overflow-wrap: break-word;
+}
+
 a {
   color: inherit;
   text-decoration: none;

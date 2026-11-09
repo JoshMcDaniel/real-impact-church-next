@@ -40,3 +40,15 @@ export const faqJsonLd = (faq: FaqItem[]) => ({
     acceptedAnswer: { '@type': 'Answer', text: item.answer },
   })),
 });
+
+/** schema.org BreadcrumbList, starting from Home. Paths are site-relative. */
+export const breadcrumbJsonLd = (crumbs: { name: string; path: string }[]) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [{ name: 'Home', path: '/' }, ...crumbs].map((crumb, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: crumb.name,
+    item: absoluteUrl(crumb.path),
+  })),
+});
