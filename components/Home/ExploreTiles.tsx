@@ -61,7 +61,7 @@ export const ExploreTiles = () => {
               alt={item.image.description}
               fill
               sizes="(max-width: 600px) 100vw, (max-width: 1200px) 33vw, 250px"
-              style={{ objectFit: 'cover', opacity: 0.6 }}
+              style={{ objectFit: 'cover', opacity: 0.85 }}
             />
             <Box
               component="span"
@@ -74,7 +74,7 @@ export const ExploreTiles = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '6px',
-                backgroundColor: 'rgba(20,20,20,.55)',
+                backgroundColor: 'rgba(20,20,20,.62)',
               }}
             >
               <Box component="span" sx={{ fontSize: 22, fontWeight: 800 }}>

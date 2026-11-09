@@ -76,8 +76,8 @@
       "home_summary_items": [
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1bWPH3ie_N52ELU91beJYrY9yYnWq15q_",
-            "description": ""
+            "path": "/images/home/who-we-are.webp",
+            "description": "Real Impact Church building in Eustis, Florida, with members gathered on the lawn"
           },
           "info_text": {
             "title": "Who are we?",
@@ -87,8 +87,8 @@
         },
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1eFo84ubX3oisqxx_WDHsiWIopuXT-8d7",
-            "description": ""
+            "path": "/images/home/media.webp",
+            "description": "Holy Bible resting on a pulpit stand"
           },
           "info_text": {
             "title": "Media",
@@ -98,8 +98,8 @@
         },
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1WIxM0-XLxC8Tn46OBbjSPwui-pbo2Reo",
-            "description": ""
+            "path": "/images/home/events.webp",
+            "description": "Calendar and planner on a desk"
           },
           "info_text": {
             "title": "Events",
@@ -109,8 +109,8 @@
         },
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1CTYUbXYsnMfBpkUmQIqhm6qQZX6U8E_T",
-            "description": ""
+            "path": "/images/home/giving.webp",
+            "description": "Tablet showing an online giving page"
           },
           "info_text": {
             "title": "Giving",
@@ -120,8 +120,8 @@
         },
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1GSi4_Kbm0auo9mDnS122_LgvlUASl2Kg",
-            "description": ""
+            "path": "/images/home/get-connected.webp",
+            "description": "Person holding a phone and a cup of coffee"
           },
           "info_text": {
             "title": "Get connected",
