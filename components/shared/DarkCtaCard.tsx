@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import GlowLayer from './GlowLayer';
+import PillLabel from './PillLabel';
 import Typography from '@mui/material/Typography';
 import { ReactNode } from 'react';
 import { brand, contentMaxWidth } from '../../constants/brand';
@@ -12,11 +13,15 @@ type DarkCtaCardProps = {
   actions: ReactNode;
   /** Optional extra content under the text (e.g. schedule pills). */
   extra?: ReactNode;
+  /** Optional pill label above the title. */
+  label?: string;
+  /** Optional id on the section (for in-page links). */
+  sectionId?: string;
 };
 
 /** Dark rounded call-to-action card with a soft red glow. */
-export const DarkCtaCard = ({ id, title, text, actions, extra }: DarkCtaCardProps) => (
-  <Box component="section" aria-labelledby={id} sx={{ maxWidth: contentMaxWidth, mx: 'auto', px: 3, py: { xs: 8, md: 11.25 } }}>
+export const DarkCtaCard = ({ id, title, text, actions, extra, label, sectionId }: DarkCtaCardProps) => (
+  <Box component="section" id={sectionId} aria-labelledby={id} sx={{ maxWidth: contentMaxWidth, mx: 'auto', px: 3, py: { xs: 8, md: 11.25 } }}>
     <Box
       sx={{
         position: 'relative',
@@ -33,6 +38,7 @@ export const DarkCtaCard = ({ id, title, text, actions, extra }: DarkCtaCardProp
     >
       <GlowLayer glows={[{ right: -120, top: -120, size: 380, opacity: 0.18 }]} />
       <Box sx={{ position: 'relative', flex: '2 1 420px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {label && <PillLabel>{label}</PillLabel>}
         <Typography id={id} component="h2" sx={{ m: 0, fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 800, lineHeight: 1.15 }}>
           {title}
         </Typography>

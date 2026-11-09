@@ -4,6 +4,7 @@ import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
 import BreakableTitle from '../../components/shared/BreakableTitle';
+import DarkCtaCard from '../../components/shared/DarkCtaCard';
 import PageHero from '../../components/shared/PageHero';
 import PillButton from '../../components/shared/PillButton';
 import { PLAN_VISIT_HREF } from '../../components/Layout/SiteHeader';
@@ -143,33 +144,22 @@ export const Beliefs = () => {
           </Box>
         </Box>
 
-        <Box component="section" aria-labelledby="beliefs-cta-title" sx={{ backgroundColor: brand.charcoal, color: brand.white, px: 3, py: { xs: 8, md: 11.25 } }}>
-          <Box
-            sx={{
-              maxWidth: contentMaxWidth,
-              mx: 'auto',
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 4,
-            }}
-          >
-            <Box sx={{ flex: '2 1 420px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <Typography id="beliefs-cta-title" component="h2" sx={{ m: 0, fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: 800, lineHeight: 1.15 }}>
-                Have questions about faith?
-              </Typography>
-              <Typography component="p" sx={{ m: 0, fontSize: 17, lineHeight: 1.7, color: '#d6dadd', maxWidth: 620 }}>
-                We’d love to talk with you. Reach out anytime, or join us Sunday morning for Bible study.
-              </Typography>
-            </Box>
-            <Box sx={{ flex: '1 1 260px', display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: { md: 'flex-end' } }}>
-              <PillButton href="/connect">Ask Us a Question</PillButton>
-              <PillButton href={PLAN_VISIT_HREF} tone="ghost">
-                Plan Your Visit
-              </PillButton>
-            </Box>
-          </Box>
+        <Box sx={{ mt: { xs: -8, md: -12.5 } }}>
+          <DarkCtaCard
+            id="beliefs-cta-title"
+            title="Have questions about faith?"
+            text="We’d love to talk with you. Reach out anytime, or join us Sunday morning for Bible study."
+            actions={
+              <>
+                <PillButton href="/connect" sx={{ minHeight: 52 }}>
+                  Ask Us a Question
+                </PillButton>
+                <PillButton href={PLAN_VISIT_HREF} tone="ghost" sx={{ minHeight: 52 }}>
+                  Plan Your Visit
+                </PillButton>
+              </>
+            }
+          />
         </Box>
       </Box>
     </Box>

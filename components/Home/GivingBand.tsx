@@ -1,47 +1,39 @@
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { brand, contentMaxWidth } from '../../constants/brand';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useGivingConfig } from '../../constants/app-config/app-config-hooks';
+import DarkCtaCard from '../shared/DarkCtaCard';
 import PillButton from '../shared/PillButton';
 
+/** Home page giving call to action (dark card; Give Online stays red). */
 export const GivingBand = () => {
   const { online_giving } = useGivingConfig();
 
+  // Pull up so the gap after the tiles above matches normal section spacing.
   return (
-    <Box component="section" id="give" aria-labelledby="give-title" sx={{ backgroundColor: brand.red, color: brand.white, px: 3 }}>
-      <Box
-        sx={{
-          maxWidth: contentMaxWidth,
-          mx: 'auto',
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          gap: 5,
-          py: 9,
-        }}
-      >
-        <Box sx={{ flex: '2 1 420px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <Typography
-            id="give-title"
-            component="h2"
-            sx={{ m: 0, fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: 800, lineHeight: 1.15 }}
+    <Box sx={{ mt: { xs: -8, md: -11.25 } }}>
+    <DarkCtaCard
+      sectionId="give"
+      id="give-title"
+      label="Giving"
+      title="Make a real impact through giving."
+      text="Thank you for supporting our church and its ministries. Give securely online through Tithe.ly, in person on Sunday, or by mail."
+      actions={
+        <>
+          <PillButton
+            href={online_giving.giving_path}
+            target="_blank"
+            startIcon={<FavoriteBorderIcon />}
+            aria-label="Give online through Tithe.ly (opens in a new tab)"
+            sx={{ minHeight: 52 }}
           >
-            Make a real impact through giving.
-          </Typography>
-          <Typography component="p" sx={{ m: 0, fontSize: 17, lineHeight: 1.7, color: brand.redSoft, maxWidth: 620 }}>
-            Thank you for supporting our church and its ministries. Give securely online through Tithe.ly, in person on
-            Sunday, or by mail.
-          </Typography>
-        </Box>
-        <Box sx={{ flex: '1 1 260px', display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: { md: 'flex-end' } }}>
-          <PillButton href={online_giving.giving_path} tone="white">
             Give Online
           </PillButton>
-          <PillButton href="/giving" tone="ghost">
+          <PillButton href="/giving" tone="ghost" sx={{ minHeight: 52 }}>
             Other Ways to Give
           </PillButton>
-        </Box>
-      </Box>
+        </>
+      }
+    />
     </Box>
   );
 };

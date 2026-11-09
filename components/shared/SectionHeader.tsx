@@ -2,25 +2,21 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { ReactNode } from 'react';
 import { brand } from '../../constants/brand';
+import PillLabel from './PillLabel';
 
-type EyebrowProps = { children: ReactNode; color?: string };
+type EyebrowProps = { children: ReactNode; tone?: 'red' | 'dark' };
 
-/** Small uppercase label shown above section headings. */
-export const Eyebrow = ({ children, color = brand.red }: EyebrowProps) => (
-  <Typography
-    component="p"
-    sx={{
-      m: 0,
-      fontSize: 13,
-      fontWeight: 700,
-      letterSpacing: '.24em',
-      textTransform: 'uppercase',
-      color,
-    }}
-  >
-    {children}
-  </Typography>
-);
+/** Section label shown above headings: a small red (or dark) pill. */
+export const Eyebrow = ({ children, tone = 'red' }: EyebrowProps) => <PillLabel tone={tone}>{children}</PillLabel>;
+
+/** Shared section heading style (sizes match across pages). */
+export const sectionTitleSx = {
+  m: 0,
+  fontSize: 'clamp(30px, 3.4vw, 44px)',
+  lineHeight: 1.1,
+  fontWeight: 800,
+  letterSpacing: '-0.01em',
+};
 
 type SectionHeaderProps = {
   id: string;
@@ -29,18 +25,11 @@ type SectionHeaderProps = {
   /** Optional content shown on the right (or below on small screens). */
   aside?: ReactNode;
   titleColor?: string;
-  eyebrowColor?: string;
+  eyebrowTone?: 'red' | 'dark';
 };
 
-/** Eyebrow + H2 heading row used at the top of home page sections. */
-export const SectionHeader = ({
-  id,
-  eyebrow,
-  title,
-  aside,
-  titleColor = brand.charcoal,
-  eyebrowColor,
-}: SectionHeaderProps) => (
+/** Pill label + H2 heading row used at the top of page sections. */
+export const SectionHeader = ({ id, eyebrow, title, aside, titleColor = brand.charcoal, eyebrowTone = 'red' }: SectionHeaderProps) => (
   <Box
     sx={{
       display: 'flex',
@@ -51,18 +40,8 @@ export const SectionHeader = ({
     }}
   >
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px', maxWidth: 680 }}>
-      <Eyebrow color={eyebrowColor}>{eyebrow}</Eyebrow>
-      <Typography
-        id={id}
-        component="h2"
-        sx={{
-          m: 0,
-          fontSize: 'clamp(30px, 3.4vw, 44px)',
-          lineHeight: 1.15,
-          fontWeight: 800,
-          color: titleColor,
-        }}
-      >
+      <Eyebrow tone={eyebrowTone}>{eyebrow}</Eyebrow>
+      <Typography id={id} component="h2" sx={{ ...sectionTitleSx, color: titleColor }}>
         {title}
       </Typography>
     </Box>

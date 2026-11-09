@@ -6,7 +6,7 @@ import AboutPreview from '../components/Home/AboutPreview';
 import ExploreTiles from '../components/Home/ExploreTiles';
 import GivingBand from '../components/Home/GivingBand';
 import HomeHero from '../components/Home/HomeHero';
-import LatestSermon from '../components/Home/LatestSermon';
+import LatestSermonFeature from '../components/Media/LatestSermonFeature';
 import PlanVisit, { FaqItem } from '../components/Home/PlanVisit';
 import UpcomingEvents from '../components/Home/UpcomingEvents';
 import VisitBar from '../components/Home/VisitBar';
@@ -30,6 +30,8 @@ type HomeProps = {
   services: Service[];
   events: EventType[];
   latestVideo: Video | null;
+  /** Latest sermon was posted in the last 8 days (decided at build time). */
+  latestIsNew: boolean;
 };
 
 /** "Our worship service is Sundays at 10:30 AM. Come early for free breakfast at 9:00 AM and Bible study at 9:30 AM." */
@@ -45,7 +47,7 @@ const serviceTimesAnswer = (sunday: SundayItem[]): string => {
   return `${main}${extras}`.trim();
 };
 
-const Home = ({ services, events, latestVideo }: HomeProps) => {
+const Home = ({ services, events, latestVideo, latestIsNew }: HomeProps) => {
   const homeConfig = useHomeConfig();
   const primaryService = getPrimaryService(services);
   const sundayMorning = getSundayMorning(primaryService);
@@ -72,7 +74,16 @@ const Home = ({ services, events, latestVideo }: HomeProps) => {
         <VisitBar primaryService={primaryService} />
         <AboutPreview />
         <WhatToExpect sundayMorning={sundayMorning} />
-        <LatestSermon video={latestVideo} />
+        {latestVideo && (
+          <LatestSermonFeature
+            id="sermons"
+            video={latestVideo}
+            isNew={latestIsNew}
+            moreHref="/media"
+            moreLabel="All Sermons"
+            sx={{ pt: { xs: 10, md: 12.5 }, pb: 0 }}
+          />
+        )}
         <UpcomingEvents events={events} sundayMorning={sundayMorning} />
         <ExploreTiles />
         <GivingBand />
@@ -105,6 +116,8 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       services: services ?? [],
       events: events ?? [],
       latestVideo,
+      latestIsNew:
+        !!latestVideo?.publishedAt && Date.now() - new Date(latestVideo.publishedAt).getTime() < 8 * 24 * 60 * 60 * 1000,
     },
     // Regenerate at most every 15 minutes so new events and sermons show up quickly.
     revalidate: 900,
