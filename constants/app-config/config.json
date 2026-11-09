@@ -188,20 +188,29 @@
     },
     "about": {
       "header": {
-        "title": "About",
-        "description": "We are a local Christian community, based out of Eustis Florida, with a global vision. Come and see how you too can make a Real Impact for Christ!"
+        "title": "About Us | Real Impact Church in Eustis, FL",
+        "description": "Real Impact Church is a local Christian church in Eustis, Florida with a global vision. Learn who we are, our mission and vision, what we believe, and meet our staff."
       },
-      "intro_section": {
-        "images": {
-          "intro_image": {
-            "path": "/images/real_impact_church_about_intro.jpg",
-            "description": "Leading others to Christ"
-          }
-        },
-        "text": {
-          "primary": "Learn more about Real Impact",
-          "sub": "See how God is at work here"
+      "hero": {
+        "eyebrow": "About Real Impact Church",
+        "title": "A local church in Eustis, Florida with a global vision.",
+        "text": "See how God is at work here — and how you can make a real impact for Christ.",
+        "image": {
+          "path": "/images/home/who-we-are.webp",
+          "description": "Real Impact Church building in Eustis, Florida, with members gathered on the lawn"
         }
+      },
+      "who_we_are": {
+        "title": "A church where you’ll be loved, encouraged, and challenged.",
+        "paragraphs": [
+          "We are a local church with a global vision. Our desire is to make a positive impact on this world with the love and good news of our Lord and Savior Jesus Christ.",
+          "Are you looking for a church where you’ll be loved, encouraged, and challenged? Do you want to hear preaching that teaches you about God’s Word in a way that is easy to understand? Do you want to live a meaningful life that is pleasing to God and leaves a positive mark on society? Then look no further! Let us invite you to join us this Sunday."
+        ],
+        "image": {
+          "path": "/images/real_impact_church_about_intro.jpg",
+          "description": "Members of Real Impact Church gathered together in worship"
+        },
+        "quote": "We’re saving a place just for you!"
       },
       "about_description": {
         "descriptions": [
@@ -219,28 +228,57 @@
           }
         ]
       },
-      "nav_tiles": {
-        "_comment": "The tile routes must exist in the baseline.",
-        "tiles": [
-          {
-            "title": "What we believe",
-            "summary": "Learn more about what we, as a Christian church, believe.",
-            "link_text": "Learn More",
-            "route": "beliefs"
-          },
-          {
-            "title": "Meet the Staff",
-            "summary": "Meet some of our Staff that help make Real Impact Church feel like a family.",
-            "link_text": "Learn More",
-            "route": "staff"
-          }
+      "beliefs_preview": {
+        "title": "Grounded in God’s Word",
+        "text": "We’re gladly bound to the authority of Scripture and measure everything we believe and do against the truth of God’s Word.",
+        "featured": [
+          "Trinity",
+          "Jesus Christ",
+          "The Holy Spirit",
+          "Scripture",
+          "Redemption/Salvation"
         ]
+      },
+      "staff_preview": {
+        "title": "Meet the people who make Real Impact feel like family",
+        "count": 4
+      },
+      "cta": {
+        "title": "Your seat is saved this Sunday.",
+        "reassurances": [
+          "No dress code",
+          "Free breakfast",
+          "Easy-to-understand preaching",
+          "Friendly faces"
+        ],
+        "steps": {
+          "breakfast": {
+            "title": "Grab breakfast on us",
+            "text": "Coffee, a hot plate, and new friends."
+          },
+          "bible_study": {
+            "title": "Dig into the Word",
+            "text": "Bible study before the service."
+          },
+          "worship": {
+            "title": "Worship together",
+            "text": "Our weekly worship service."
+          }
+        }
       }
     },
     "beliefs": {
       "header": {
-        "title": "Beliefs",
-        "description": "See what we believe about our Lord Jesus Christ, and why."
+        "title": "What We Believe | Real Impact Church in Eustis, FL",
+        "description": "The Real Impact Church statement of faith: what we believe about God, Jesus Christ, the Holy Spirit, the Bible, salvation and the church — with scripture references."
+      },
+      "hero": {
+        "title": "What we believe",
+        "text": "The Real Impact Church statement of faith: what we believe about God, Jesus Christ, the Bible and salvation — and why.",
+        "image": {
+          "path": "/images/home/media.webp",
+          "description": "Holy Bible resting on a pulpit stand"
+        }
       },
       "doctrine": {
         "title": "Real Impact Church Doctrine",
