@@ -5,11 +5,3 @@ export type Service = {
   time: string;
   description: string;
 };
-
-/** The latest sermon video pulled from YouTube at build time. */
-export type LatestVideo = {
-  id: string;
-  title: string;
-  thumbnailUrl: string;
-  publishedAt: string;
-};

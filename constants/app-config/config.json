@@ -635,16 +635,21 @@
     "media": {
       "media_page": {
         "header": {
-          "title": "Media",
-          "description": "See what Real Impact Church is all about. Checkout our latest and most popular sermons."
+          "title": "Sermons & Media | Real Impact Church in Eustis, FL",
+          "description": "Watch recent and popular sermons from Real Impact Church in Eustis, Florida. Bible teaching that's easy to understand — catch up anytime, anywhere."
+        },
+        "hero": {
+          "eyebrow": "Sermons & media",
+          "title": "Watch sermons from Real Impact Church",
+          "text": "Bible teaching that’s easy to understand — catch up anytime, anywhere.",
+          "image": {
+            "path": "/images/home/media.webp",
+            "description": "Holy Bible resting on a pulpit stand"
+          }
         },
         "youtube": {
-          "most_recent": {
-            "number_of_videos": 5
-          },
-          "most_popular": {
-            "number_of_videos": 5
-          }
+          "recent_count": 10,
+          "popular_count": 4
         }
       },
       "social_media": [
