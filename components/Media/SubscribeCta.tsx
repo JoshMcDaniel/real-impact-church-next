@@ -59,7 +59,14 @@ export const SubscribeCta = ({ videos }: { videos: Video[] }) => {
             <PillButton
               href={`${channelUrl}?sub_confirmation=1`}
               startIcon={<NotificationsNoneIcon />}
-              sx={{ minHeight: 56, px: { xs: '20px', sm: '30px' }, fontSize: { xs: 16, sm: 17 }, whiteSpace: 'nowrap' }}
+              sx={{
+                minHeight: 56,
+                px: { xs: '18px', sm: '30px' },
+                fontSize: { xs: 16, sm: 17 },
+                textAlign: 'center',
+                // Very narrow screens: drop the bell so the label fits on one line.
+                '@media (max-width: 400px)': { '& .MuiButton-startIcon': { display: 'none' } },
+              }}
             >
               Subscribe on YouTube
             </PillButton>
