@@ -8,6 +8,9 @@ type PillButtonProps = Omit<ButtonProps, 'variant' | 'href'> & {
   href: string;
   tone?: Variant;
   size?: 'medium' | 'small';
+  /** Anchor attributes for external links. */
+  target?: string;
+  download?: string;
 };
 
 const toneStyles: Record<Variant, object> = {
@@ -38,7 +41,7 @@ const toneStyles: Record<Variant, object> = {
   },
 };
 
-const isExternal = (href: string) => /^(https?:|mailto:|tel:)/.test(href);
+const isExternal = (href: string) => /^(https?:|mailto:|tel:|data:)/.test(href);
 
 /**
  * Rounded call-to-action link styled as a button.
@@ -50,6 +53,8 @@ export const PillButton = ({
   size = 'medium',
   sx,
   children,
+  target,
+  download,
   ...rest
 }: PillButtonProps) => {
   const external = isExternal(href);
@@ -57,7 +62,7 @@ export const PillButton = ({
     <Button
       {...rest}
       {...(external
-        ? { component: 'a', href, rel: href.startsWith('http') ? 'noopener' : undefined }
+        ? { component: 'a', href, target, download, rel: href.startsWith('http') ? 'noopener' : undefined }
         : { component: Link, href })}
       disableElevation
       sx={{
