@@ -1,4 +1,5 @@
-import { Box, Icon, Link } from '@mui/material';
+import { Box, Link } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import React from 'react';
 
 type Props = {
@@ -18,7 +19,7 @@ const ArrowLink = (props: Props) => {
       >
         {props.linkText}
       </Link>
-      <Icon color="secondary">arrow_forward</Icon>
+      <ArrowForwardIcon color="secondary" />
     </Box>
   );
 };
