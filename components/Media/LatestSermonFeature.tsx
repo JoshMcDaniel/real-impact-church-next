@@ -73,22 +73,17 @@ export const LatestSermonFeature = ({ video, isNew }: LatestSermonFeatureProps) 
           <Box
             component="span"
             sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
               alignSelf: 'flex-start',
               backgroundColor: brand.red,
               borderRadius: '999px',
-              p: '6px 14px 6px 8px',
+              px: 2,
+              py: '7px',
               fontSize: 13,
               fontWeight: 800,
               letterSpacing: '.08em',
               textTransform: 'uppercase',
             }}
           >
-            <Box aria-hidden sx={{ width: 22, height: 22, borderRadius: '50%', backgroundColor: brand.white, color: brand.red, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <PlayArrowIcon sx={{ fontSize: 16 }} />
-            </Box>
             Latest sermon
           </Box>
           <Typography id="latest-title" component="h2" sx={{ m: 0, fontSize: 'clamp(30px, 3.6vw, 46px)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.01em' }}>

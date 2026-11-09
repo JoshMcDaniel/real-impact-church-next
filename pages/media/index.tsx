@@ -1,13 +1,15 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined';
 import { GetStaticProps } from 'next';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
 import LatestSermonFeature from '../../components/Media/LatestSermonFeature';
 import SubscribeCta from '../../components/Media/SubscribeCta';
-import VideoCard from '../../components/Media/VideoCard';
+import PopularSermons from '../../components/Media/PopularSermons';
+import SermonCard from '../../components/Media/SermonCard';
+import PillButton from '../../components/shared/PillButton';
+import PillLabel from '../../components/shared/PillLabel';
 import PageHero from '../../components/shared/PageHero';
-import { Eyebrow } from '../../components/shared/SectionHeader';
 import appConfig from '../../constants/app-config/config.json';
 import { useMediaConfig } from '../../constants/app-config/app-config-hooks';
 import { brand, contentMaxWidth } from '../../constants/brand';
@@ -25,7 +27,7 @@ type MediaProps = {
 const gridSx = {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, max(260px, calc((100% - 48px) / 3))), 1fr))',
-  gap: '28px 24px',
+  gap: 3,
 };
 
 export const Media = ({ recent, popular, latestIsNew }: MediaProps) => {
@@ -65,57 +67,31 @@ export const Media = ({ recent, popular, latestIsNew }: MediaProps) => {
         )}
 
         {more.length > 0 && (
-          <Box component="section" aria-labelledby="recent-title" sx={{ scrollMarginTop: '96px', maxWidth: contentMaxWidth, mx: 'auto', px: 3, pt: 5, pb: { xs: 8, md: 11.25 }, display: 'flex', flexDirection: 'column', gap: 3.5 }}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 2 }}>
-              <Typography id="recent-title" component="h2" sx={{ m: 0, fontSize: 'clamp(26px, 2.6vw, 34px)', fontWeight: 800, color: brand.charcoal }}>
-                Recent sermons
-              </Typography>
-              <Box
-                component="a"
-                href={channelUrl}
-                rel="noopener"
-                sx={{ fontWeight: 700, fontSize: 16, display: 'inline-flex', alignItems: 'center', gap: 1, minHeight: 44, color: brand.red, textDecoration: 'none' }}
-              >
-                All videos on YouTube <ArrowForwardIcon fontSize="small" />
+          <Box
+            component="section"
+            aria-labelledby="recent-title"
+            sx={{ scrollMarginTop: '96px', maxWidth: contentMaxWidth, mx: 'auto', px: 3, pt: 6, pb: { xs: 8, md: 12.5 }, display: 'flex', flexDirection: 'column', gap: 4 }}
+          >
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '18px' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <PillLabel tone="dark">Recent sermons</PillLabel>
+                <Typography id="recent-title" component="h2" sx={{ m: 0, fontSize: 'clamp(30px, 3.4vw, 44px)', fontWeight: 800, color: brand.charcoal, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+                  Catch up on recent messages
+                </Typography>
               </Box>
+              <PillButton href={channelUrl} tone="outline" startIcon={<SmartDisplayOutlinedIcon />}>
+                All videos on YouTube
+              </PillButton>
             </Box>
             <Box sx={gridSx}>
               {more.map((video) => (
-                <VideoCard key={video.id} video={video} />
+                <SermonCard key={video.id} video={video} />
               ))}
             </Box>
           </Box>
         )}
 
-        {popular.length > 0 && (
-          <Box component="section" aria-labelledby="popular-title" sx={{ backgroundColor: brand.charcoal, color: brand.white, px: 3, py: { xs: 8, md: 11.25 } }}>
-            <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', display: 'flex', flexDirection: 'column', gap: 3.5 }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <Eyebrow color="#ff6b7f">Most watched</Eyebrow>
-                <Typography id="popular-title" component="h2" sx={{ m: 0, fontSize: 'clamp(26px, 2.6vw, 34px)', fontWeight: 800 }}>
-                  Popular messages
-                </Typography>
-              </Box>
-              <Box
-                component="ol"
-                sx={{
-                  listStyle: 'none',
-                  m: 0,
-                  p: 0,
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, max(220px, calc((100% - 72px) / 4))), 1fr))',
-                  gap: 3,
-                }}
-              >
-                {popular.map((video, index) => (
-                  <li key={video.id}>
-                    <VideoCard video={video} dark rank={index + 1} />
-                  </li>
-                ))}
-              </Box>
-            </Box>
-          </Box>
-        )}
+        <PopularSermons videos={popular} />
 
         <SubscribeCta videos={recent} />
       </Box>
