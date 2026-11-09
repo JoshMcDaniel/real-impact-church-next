@@ -2,11 +2,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import YouTubeIcon from '@mui/icons-material/YouTube';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
+import SubscribeCta from '../../components/Media/SubscribeCta';
 import VideoCard from '../../components/Media/VideoCard';
 import PageHero from '../../components/shared/PageHero';
 import PillButton from '../../components/shared/PillButton';
@@ -192,33 +192,7 @@ export const Media = ({ recent, popular }: MediaProps) => {
           </Box>
         )}
 
-        <Box component="section" aria-labelledby="subscribe-title" sx={{ maxWidth: contentMaxWidth, mx: 'auto', px: 3, py: { xs: 8, md: 11.25 } }}>
-          <Box
-            sx={{
-              backgroundColor: brand.red,
-              color: brand.white,
-              borderRadius: '28px',
-              p: 'clamp(32px, 5vw, 56px)',
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 3.5,
-            }}
-          >
-            <Box sx={{ flex: '2 1 420px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <Typography id="subscribe-title" component="h2" sx={{ m: 0, fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 800, lineHeight: 1.15 }}>
-                Never miss a message.
-              </Typography>
-              <Typography component="p" sx={{ m: 0, fontSize: 17, lineHeight: 1.7, color: brand.redSoft }}>
-                Subscribe on YouTube to get new sermons as soon as they’re posted.
-              </Typography>
-            </Box>
-            <PillButton href={`${channelUrl}?sub_confirmation=1`} tone="white" startIcon={<YouTubeIcon />}>
-              Subscribe on YouTube
-            </PillButton>
-          </Box>
-        </Box>
+        <SubscribeCta videos={recent} />
       </Box>
     </Box>
   );
