@@ -1,17 +1,21 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { Montserrat } from 'next/font/google';
+import localFont from 'next/font/local';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '../constants/app-config/Theme';
 import ScrollToTop from '../components/shared/ScrollToTop';
 import SiteHeader from '../components/Layout/SiteHeader';
 import SiteFooter from '../components/Layout/SiteFooter';
 
-// Self-hosted by Next.js: no render-blocking request to Google Fonts.
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+// Self-hosted from the repo (variable font, latin subset, weights 400-800).
+// Uses next/font/local rather than next/font/google so the build never has to
+// fetch from Google Fonts, which made Vercel builds fail intermittently.
+const montserrat = localFont({
+  src: '../styles/fonts/Montserrat-latin-variable.woff2',
+  weight: '400 800',
+  style: 'normal',
   display: 'swap',
+  fallback: ['Helvetica', 'Arial', 'sans-serif'],
 });
 
 function App({ Component, pageProps }: AppProps) {
