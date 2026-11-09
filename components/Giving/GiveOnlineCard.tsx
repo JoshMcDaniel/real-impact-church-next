@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import GlowLayer from '../shared/GlowLayer';
 import Typography from '@mui/material/Typography';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -17,7 +18,6 @@ export const GiveOnlineCard = () => {
       <Box
         sx={{
           position: 'relative',
-          overflow: 'hidden',
           backgroundColor: brand.footer,
           color: brand.white,
           borderRadius: '28px',
@@ -27,7 +27,7 @@ export const GiveOnlineCard = () => {
           alignItems: 'center',
         }}
       >
-        <Box aria-hidden sx={{ position: 'absolute', left: -140, bottom: -160, width: 440, height: 440, borderRadius: '50%', backgroundColor: brand.red, opacity: 0.16 }} />
+        <GlowLayer glows={[{ left: -140, bottom: -160, size: 440, opacity: 0.16 }]} />
 
         <Box sx={{ position: 'relative', flex: '1 1 380px', minWidth: 0, p: 'clamp(32px, 5vw, 56px)', display: 'flex', flexDirection: 'column', gap: '18px' }}>
           <PillLabel>Give online</PillLabel>

@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import GlowLayer from '../shared/GlowLayer';
 import Typography from '@mui/material/Typography';
 import CheckIcon from '@mui/icons-material/Check';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
@@ -26,7 +27,6 @@ export const SubscribeCta = ({ videos }: { videos: Video[] }) => {
       <Box
         sx={{
           position: 'relative',
-          overflow: 'hidden',
           backgroundColor: brand.footer,
           color: brand.white,
           borderRadius: '28px',
@@ -35,7 +35,7 @@ export const SubscribeCta = ({ videos }: { videos: Video[] }) => {
           alignItems: 'center',
         }}
       >
-        <Box aria-hidden sx={{ position: 'absolute', right: -120, top: -120, width: 420, height: 420, borderRadius: '50%', backgroundColor: brand.red, opacity: 0.18 }} />
+        <GlowLayer glows={[{ right: -120, top: -120, size: 420, opacity: 0.18 }]} />
 
         <Box sx={{ position: 'relative', flex: '1.2 1 420px', minWidth: 0, p: 'clamp(32px, 5vw, 60px)', display: 'flex', flexDirection: 'column', gap: '18px' }}>
           <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: '12px', fontSize: 14, fontWeight: 800, letterSpacing: '.04em' }}>

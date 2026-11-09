@@ -8,6 +8,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { groq } from 'next-sanity';
 import Link from 'next/link';
 import DynamicHead from '../../../components/DynamicHead/DynamicHead';
+import GlowLayer from '../../../components/shared/GlowLayer';
 import CopyLinkButton from '../../../components/Media/CopyLinkButton';
 import LinkifiedText from '../../../components/Media/LinkifiedText';
 import LitePlayer from '../../../components/Media/LitePlayer';
@@ -38,10 +39,6 @@ const metaDescription = (video: Video) => {
   return text.length > 155 ? `${text.slice(0, 155).replace(/\s+\S*$/, '')}…` : text;
 };
 
-const Glow = ({ sx }: { sx: object }) => (
-  <Box aria-hidden sx={{ position: 'absolute', borderRadius: '50%', backgroundColor: brand.red, ...sx }} />
-);
-
 const SelectedMedia = ({ video, moreVideos, services }: SelectedMediaProps) => {
   const path = `/media/${video.id}`;
   const durationWords = formatDurationWords(video.duration);
@@ -68,10 +65,14 @@ const SelectedMedia = ({ video, moreVideos, services }: SelectedMediaProps) => {
         <Box
           component="section"
           aria-label="Video player"
-          sx={{ position: 'relative', overflow: 'hidden', backgroundColor: brand.footer, px: 3, pt: 4, pb: 7 }}
+          sx={{ position: 'relative', backgroundColor: brand.footer, px: 3, pt: 4, pb: 7 }}
         >
-          <Glow sx={{ right: -160, top: -200, width: 520, height: 520, opacity: 0.16 }} />
-          <Glow sx={{ left: -180, bottom: -260, width: 480, height: 480, opacity: 0.1 }} />
+          <GlowLayer
+            glows={[
+              { right: -160, top: -200, size: 520, opacity: 0.16 },
+              { left: -180, bottom: -260, size: 480, opacity: 0.1 },
+            ]}
+          />
           <Box sx={{ position: 'relative', maxWidth: 1100, mx: 'auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <Box component="nav" aria-label="Breadcrumb" sx={{ fontSize: 14, fontWeight: 600, color: '#b4babe' }}>
               <Box component={Link} href="/media" sx={{ color: brand.white, textDecoration: 'underline', textUnderlineOffset: '3px' }}>
@@ -126,7 +127,6 @@ const SelectedMedia = ({ video, moreVideos, services }: SelectedMediaProps) => {
             aria-labelledby="share-title"
             sx={{
               position: 'relative',
-              overflow: 'hidden',
               flex: '1 1 300px',
               minWidth: 0,
               backgroundColor: brand.footer,
@@ -138,7 +138,7 @@ const SelectedMedia = ({ video, moreVideos, services }: SelectedMediaProps) => {
               gap: '14px',
             }}
           >
-            <Glow sx={{ right: -90, top: -90, width: 220, height: 220, opacity: 0.18 }} />
+            <GlowLayer glows={[{ right: -90, top: -90, size: 220, opacity: 0.18 }]} />
             <Typography id="share-title" component="h2" sx={{ position: 'relative', m: 0, fontSize: 22, fontWeight: 800 }}>
               Watch &amp; share
             </Typography>

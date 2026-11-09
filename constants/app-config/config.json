@@ -151,10 +151,18 @@
     },
     "connect": {
       "header": {
-        "title": "Connect",
-        "description": "Connect with our loving Christian community here at Real Impact Church and see how you too can make a Real Impact for Christ!"
+        "title": "Connect | Real Impact Church in Eustis, FL",
+        "description": "Connect with Real Impact Church in Eustis, Florida. Send us a message, share a prayer request, or plan a visit. Someone from our team will reach out personally."
       },
-      "subtitle": "Start a connection with Real Impact Church",
+      "hero": {
+        "eyebrow": "Connect",
+        "title": "We’d love to meet you",
+        "text": "Whether you’re new to faith or looking for a church home, we want to connect with you. Someone from our team will reach out personally.",
+        "image": {
+          "path": "/images/home/get-connected.webp",
+          "description": "Person holding a phone and a cup of coffee"
+        }
+      },
       "snackbar": {
         "success_message": "Success! We'll reach out to you soon.",
         "fail_message": "Something went wrong. Please try again."

@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import GlowLayer from './GlowLayer';
 import Typography from '@mui/material/Typography';
 import { ReactNode } from 'react';
 import { brand, contentMaxWidth } from '../../constants/brand';
@@ -17,7 +18,6 @@ export const DarkCtaCard = ({ id, title, text, actions }: DarkCtaCardProps) => (
     <Box
       sx={{
         position: 'relative',
-        overflow: 'hidden',
         backgroundColor: brand.footer,
         color: brand.white,
         borderRadius: '28px',
@@ -29,7 +29,7 @@ export const DarkCtaCard = ({ id, title, text, actions }: DarkCtaCardProps) => (
         gap: 3.5,
       }}
     >
-      <Box aria-hidden sx={{ position: 'absolute', right: -120, top: -120, width: 380, height: 380, borderRadius: '50%', backgroundColor: brand.red, opacity: 0.18 }} />
+      <GlowLayer glows={[{ right: -120, top: -120, size: 380, opacity: 0.18 }]} />
       <Box sx={{ position: 'relative', flex: '2 1 420px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <Typography id={id} component="h2" sx={{ m: 0, fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 800, lineHeight: 1.15 }}>
           {title}
