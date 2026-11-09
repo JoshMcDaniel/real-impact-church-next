@@ -150,6 +150,8 @@ const SelectedEvent = ({ event: eventData, isPast, moreEvents }: SelectedEventPr
             sx={{
               flex: '1 1 340px',
               minWidth: 0,
+              // When the columns stack (below ~996px), show When/Where above the description.
+              '@media (max-width: 995px)': { order: -1 },
               backgroundColor: brand.white,
               border: `1px solid ${brand.line}`,
               borderRadius: '24px',
