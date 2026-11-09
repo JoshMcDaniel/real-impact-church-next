@@ -5,26 +5,79 @@
     },
     "home": {
       "header": {
-        "title": "Welcome",
-        "description": "Welcome to Real Impact Church - a loving Christian community with one goal: To know God and to make Him known. Come and see how you too can make a Real Impact for Christ!"
+        "title": "Real Impact Church | Christian Church in Eustis, FL",
+        "description": "Real Impact Church is a Christian church in Eustis, Florida. Join us Sundays for worship at 10:30 AM, with free breakfast at 9:00 AM and Bible study at 9:30 AM. Come as you are!"
       },
-      "intro_section": {
-        "images": {
-          "intro_image": {
-            "path": "/images/revival.jpg",
-            "description": "Leading others to Christ"
-          }
-        },
-        "text": {
-          "primary": "Welcome",
-          "sub": "Ready to make a real impact for Christ?"
+      "hero": {
+        "eyebrow": "Real Impact Church · Eustis, Florida",
+        "title_lines": [
+          "Know God.",
+          "Make Him known."
+        ],
+        "text": "A loving church family with a local heart and a global vision. Come as you are — we’re saving a place just for you this Sunday.",
+        "image": {
+          "path": "/images/revival.jpg",
+          "description": "Worship gathering at Real Impact Church in Eustis, Florida"
         }
       },
+      "about_preview": {
+        "image": {
+          "path": "/images/real_impact_church_about_intro.jpg",
+          "description": "Members of Real Impact Church gathered together"
+        },
+        "title": "A local church with a global vision.",
+        "text": "Our desire is to make a positive impact on this world with the love and good news of our Lord and Savior Jesus Christ. Looking for a church in Eustis where you’ll be loved, encouraged, and challenged — with preaching that makes God’s Word easy to understand? Let us invite you to join us this Sunday."
+      },
+      "sunday_morning": {
+        "_comment": "The Worship Service time is replaced by the first Sunday service in Sanity when one exists.",
+        "items": [
+          {
+            "key": "breakfast",
+            "time": "9:00 AM",
+            "title": "Free Breakfast",
+            "text": "Grab a plate, a cup of coffee, and meet some new friends."
+          },
+          {
+            "key": "bible_study",
+            "time": "9:30 AM",
+            "title": "Bible Study",
+            "text": "Dig into God’s Word together before the service."
+          },
+          {
+            "key": "worship",
+            "time": "10:30 AM",
+            "title": "Worship Service",
+            "text": "Our weekly worship service. We’re saving a place just for you!"
+          }
+        ]
+      },
+      "expectations": [
+        {
+          "icon": "heart",
+          "title": "Come as you are",
+          "text": "A warm, family atmosphere. No dress code — just friendly faces glad you came."
+        },
+        {
+          "icon": "book",
+          "title": "Clear Bible teaching",
+          "text": "Preaching that explains God’s Word in a way that’s easy to understand and apply."
+        },
+        {
+          "icon": "music",
+          "title": "Heartfelt worship",
+          "text": "We gather to sing, pray, and glorify God together as one church family."
+        },
+        {
+          "icon": "globe",
+          "title": "A life with purpose",
+          "text": "Grow in faith and find your place making a real impact — in Lake County and beyond."
+        }
+      ],
       "home_summary_items": [
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1bWPH3ie_N52ELU91beJYrY9yYnWq15q_",
-            "description": ""
+            "path": "/images/home/who-we-are.webp",
+            "description": "Real Impact Church building in Eustis, Florida, with members gathered on the lawn"
           },
           "info_text": {
             "title": "Who are we?",
@@ -34,8 +87,8 @@
         },
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1eFo84ubX3oisqxx_WDHsiWIopuXT-8d7",
-            "description": ""
+            "path": "/images/home/media.webp",
+            "description": "Holy Bible resting on a pulpit stand"
           },
           "info_text": {
             "title": "Media",
@@ -45,8 +98,8 @@
         },
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1WIxM0-XLxC8Tn46OBbjSPwui-pbo2Reo",
-            "description": ""
+            "path": "/images/home/events.webp",
+            "description": "Calendar and planner on a desk"
           },
           "info_text": {
             "title": "Events",
@@ -56,8 +109,8 @@
         },
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1CTYUbXYsnMfBpkUmQIqhm6qQZX6U8E_T",
-            "description": ""
+            "path": "/images/home/giving.webp",
+            "description": "Tablet showing an online giving page"
           },
           "info_text": {
             "title": "Giving",
@@ -67,14 +120,32 @@
         },
         {
           "image": {
-            "path": "https://drive.google.com/uc?id=1GSi4_Kbm0auo9mDnS122_LgvlUASl2Kg",
-            "description": ""
+            "path": "/images/home/get-connected.webp",
+            "description": "Person holding a phone and a cup of coffee"
           },
           "info_text": {
             "title": "Get connected",
             "subtitle": "Become part of our loving community"
           },
           "nav_to_route": "/connect"
+        }
+      ],
+      "faq": [
+        {
+          "question": "Where is Real Impact Church located?",
+          "answer": "We meet at 35025 Huff Rd. in Eustis, Florida 32736, in Lake County."
+        },
+        {
+          "question": "What should I wear?",
+          "answer": "Come as you are — whatever you’re comfortable in is perfect."
+        },
+        {
+          "question": "What does Real Impact Church believe?",
+          "answer": "We exist to know God and to make Him known. You can read our full statement of beliefs on our Beliefs page."
+        },
+        {
+          "question": "Can I watch sermons online?",
+          "answer": "Yes — recent sermons are on our Media page and our YouTube channel."
         }
       ]
     },
@@ -578,12 +649,16 @@
     },
     "logos": {
       "title_logo": {
-        "path": "https://drive.google.com/uc?id=1ZbBhSk2OE5QnetAmJTUy_mR1ZTjIpXrR",
-        "description": "Real Impact title and logo"
+        "path": "/images/logo/real-impact-title.png",
+        "description": "Real Impact Church",
+        "width": 441,
+        "height": 86
       },
       "simple_logo": {
-        "path": "https://drive.google.com/uc?id=1iMpTO-Y23RifoK_9rxGMls6uPu4t2MVU",
-        "description": "Real Impact logo"
+        "path": "/images/logo/real-impact-icon.jpg",
+        "description": "Real Impact Church cross logo",
+        "width": 960,
+        "height": 960
       }
     },
     "schedule": {}

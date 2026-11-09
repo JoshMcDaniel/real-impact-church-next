@@ -1,124 +1,154 @@
-import {
-  Box,
-  Container,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-  Paper,
-  Stack,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import Box from '@mui/material/Box';
 import { GetStaticProps } from 'next';
 import { groq } from 'next-sanity';
-import { sanityFetch } from '../src/sanity/lib/client';
-import Image from 'next/image';
-import Link from 'next/link';
 import DynamicHead from '../components/DynamicHead/DynamicHead';
-import { ScheduleSummary } from '../components/Home/ScheduleSummary';
-import { Service } from '../components/Home/ScheduleSummaryService';
-import AddressBlock from '../components/shared/AddressBlock';
-import SectionIntroImage from '../components/shared/SectionIntroImage';
+import AboutPreview from '../components/Home/AboutPreview';
+import ExploreTiles from '../components/Home/ExploreTiles';
+import GivingBand from '../components/Home/GivingBand';
+import HomeHero from '../components/Home/HomeHero';
+import LatestSermon from '../components/Home/LatestSermon';
+import PlanVisit, { FaqItem } from '../components/Home/PlanVisit';
+import UpcomingEvents from '../components/Home/UpcomingEvents';
+import VisitBar from '../components/Home/VisitBar';
+import WhatToExpect from '../components/Home/WhatToExpect';
+import appConfig from '../constants/app-config/config.json';
 import { useHomeConfig } from '../constants/app-config/app-config-hooks';
+import { brand } from '../constants/brand';
+import { EventType } from '../constants/Event';
+import { LatestVideo, Service } from '../constants/Service';
+import {
+  getPrimaryService,
+  getSundayMorning,
+  SundayItem,
+} from '../constants/sunday-schedule';
+import { churchJsonLd, faqJsonLd } from '../constants/structured-data';
+import { sanityFetch } from '../src/sanity/lib/client';
 
 type HomeProps = {
   services: Service[];
+  events: EventType[];
+  latestVideo: LatestVideo | null;
 };
 
-const Home = (props: HomeProps) => {
+/** "Our worship service is Sundays at 10:30 AM. Come early for free breakfast at 9:00 AM and Bible study at 9:30 AM." */
+const serviceTimesAnswer = (sunday: SundayItem[]): string => {
+  const worship = sunday.find((i) => i.key === 'worship');
+  const before = sunday.filter((i) => i.key !== 'worship');
+  const main = worship ? `Our worship service is Sundays at ${worship.time}.` : '';
+  const extras = before.length
+    ? ` Come early for ${before
+        .map((i) => `${i.title.toLowerCase()} at ${i.time}`)
+        .join(' and ')}.`
+    : '';
+  return `${main}${extras}`.trim();
+};
+
+const Home = ({ services, events, latestVideo }: HomeProps) => {
   const homeConfig = useHomeConfig();
-  const items = homeConfig.home_summary_items;
-  const primaryText = homeConfig.intro_section.text.primary;
-  const subText = homeConfig.intro_section.text.sub;
-  const imagePath = homeConfig.intro_section.images.intro_image.path;
-  const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
+  const primaryService = getPrimaryService(services);
+  const sundayMorning = getSundayMorning(primaryService);
+
+  const faq: FaqItem[] = [
+    {
+      question: `What time are services at ${appConfig.organization.full_name}?`,
+      answer: serviceTimesAnswer(sundayMorning),
+    },
+    ...homeConfig.faq,
+  ];
 
   return (
-    <Box>
+    <Box sx={{ backgroundColor: brand.paper, color: brand.text }}>
       <DynamicHead
-        title={homeConfig.header.title}
+        fullTitle={homeConfig.header.title}
         description={homeConfig.header.description}
+        image={homeConfig.hero.image.path}
+        imageAlt={homeConfig.hero.image.description}
+        jsonLd={[churchJsonLd(), faqJsonLd(faq)]}
       />
-
-      <Box>
-        <SectionIntroImage
-          imagePath={imagePath}
-          primaryText={primaryText}
-          subText={subText}
-        />
-        <Container
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: isMediumView ? '1fr 2fr' : '1fr',
-            paddingTop: '32px',
-            paddingBottom: '24px',
-            gap: '2rem',
-            justifyItems: 'center',
-          }}
-        >
-          <Stack component="main" spacing={4} maxWidth="400px">
-            <Paper>
-              <AddressBlock />
-            </Paper>
-            <ScheduleSummary services={props.services} />
-          </Stack>
-          <ImageList
-            cols={isMediumView ? 2 : 1}
-            rowHeight={250}
-            gap={32}
-            sx={{
-              padding: '0',
-              margin: '0',
-              maxWidth: isMediumView ? '800px' : '400px',
-              width: '100%',
-              height: 'fit-content',
-            }}
-          >
-            {items.map((item, index) => (
-              <Box boxShadow={3} key={index}>
-                <Link href={item.nav_to_route}>
-                  <ImageListItem className="full-img-height-container">
-                    <Image
-                      src={item.image.path}
-                      alt={item.image.description}
-                      layout="fill"
-                      priority={true}
-                    />
-                    <ImageListItemBar
-                      title={item.info_text.title}
-                      subtitle={item.info_text.subtitle}
-                    />
-                  </ImageListItem>
-                </Link>
-              </Box>
-            ))}
-          </ImageList>
-        </Container>
+      <Box component="main">
+        <HomeHero />
+        <VisitBar primaryService={primaryService} />
+        <AboutPreview />
+        <WhatToExpect sundayMorning={sundayMorning} />
+        <LatestSermon video={latestVideo} />
+        <UpcomingEvents events={events} sundayMorning={sundayMorning} />
+        <ExploreTiles />
+        <GivingBand />
+        <PlanVisit faq={faq} />
       </Box>
     </Box>
   );
 };
 
-// This function gets called at build time on server-side.
-export const getStaticProps: GetStaticProps = async () => {
-  const services: Service[] = await sanityFetch({
-    query: groq`*[_type == "service"] | order(displayOrder asc) {
-      title,
-      dayOfWeek,
-      time,
-      description
-    }`,
-    tags: ['service'],
-  });
+const decodeXml = (text: string) =>
+  text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+
+/**
+ * Fetches the channel's newest video from YouTube's public RSS feed
+ * (no API key or quota needed). Returns null if the request fails.
+ */
+const fetchLatestVideo = async (): Promise<LatestVideo | null> => {
+  const { channel_id } = appConfig.organization.social_media.youtube;
+  try {
+    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channel_id}`, {
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return null;
+    const xml = await res.text();
+    const entry = xml.match(/<entry>([\s\S]*?)<\/entry>/)?.[1];
+    const id = entry?.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1];
+    if (!entry || !id) return null;
+    return {
+      id,
+      title: decodeXml(entry.match(/<title>([^<]*)<\/title>/)?.[1] ?? 'Latest sermon'),
+      thumbnailUrl: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+      publishedAt: entry.match(/<published>([^<]+)<\/published>/)?.[1] ?? '',
+    };
+  } catch {
+    return null;
+  }
+};
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const [services, events, latestVideo] = await Promise.all([
+    sanityFetch<Service[]>({
+      query: groq`*[_type == "service"] | order(displayOrder asc) {
+        title,
+        dayOfWeek,
+        time,
+        description
+      }`,
+      tags: ['service'],
+    }),
+    sanityFetch<EventType[]>({
+      query: groq`*[_type == "events" && defined(slug.current) && coalesce(endDateTime, startDateTime) >= now()]
+        | order(startDateTime asc)[0...3] {
+        _id,
+        name,
+        "slug": slug.current,
+        image,
+        startDateTime,
+        endDateTime,
+        summary
+      }`,
+      tags: ['events'],
+    }),
+    fetchLatestVideo(),
+  ]);
 
   return {
     props: {
-      services,
+      services: services ?? [],
+      events: events ?? [],
+      latestVideo,
     },
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every 1 hour
-    revalidate: 3600, // In seconds
+    // Regenerate at most every 15 minutes so new events and sermons show up quickly.
+    revalidate: 900,
   };
 };
 
