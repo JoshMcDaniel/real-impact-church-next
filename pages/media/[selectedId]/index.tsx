@@ -20,7 +20,7 @@ import { brand, contentMaxWidth } from '../../../constants/brand';
 import { Service } from '../../../constants/Service';
 import { absoluteUrl } from '../../../constants/site';
 import { breadcrumbJsonLd, videoJsonLd } from '../../../constants/structured-data';
-import { getPrimaryService, getSundayMorning } from '../../../constants/sunday-schedule';
+import { getPrimaryService, getSundayMorning, shortScheduleLabel } from '../../../constants/sunday-schedule';
 import { formatDurationWords, formatVideoDate, formatViews, Video, watchUrl } from '../../../constants/video';
 import { getRecentVideos, getVideo } from '../../../constants/youtube';
 import { sanityFetch } from '../../../src/sanity/lib/client';
@@ -37,10 +37,6 @@ const metaDescription = (video: Video) => {
   if (!text) return `Watch “${video.title}”, a sermon from Real Impact Church in Eustis, Florida.`;
   return text.length > 155 ? `${text.slice(0, 155).replace(/\s+\S*$/, '')}…` : text;
 };
-
-/** "9:00 AM" + "Free Breakfast" -> "9:00 Breakfast" */
-const scheduleLabel = (time: string, title: string) =>
-  `${time.replace(/\s?[AP]\.?M\.?$/i, '')} ${title.replace(/^Free /, '').replace(/ Service$/, '')}`;
 
 const Glow = ({ sx }: { sx: object }) => (
   <Box aria-hidden sx={{ position: 'absolute', borderRadius: '50%', backgroundColor: brand.red, ...sx }} />
@@ -177,7 +173,7 @@ const SelectedMedia = ({ video, moreVideos, services }: SelectedMediaProps) => {
                         fontWeight: highlight ? 800 : 700,
                       }}
                     >
-                      {scheduleLabel(item.time, item.title)}
+                      {shortScheduleLabel(item)}
                     </Box>
                   );
                 })}

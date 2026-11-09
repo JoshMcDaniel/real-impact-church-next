@@ -24,3 +24,7 @@ export const getSundayMorning = (primaryService?: Service): SundayItem[] =>
       ? { ...item, time: primaryService.time }
       : item
   );
+
+/** Compact pill label: "9:00 AM" + "Free Breakfast" -> "9:00 Breakfast". */
+export const shortScheduleLabel = (item: SundayItem): string =>
+  `${item.time.replace(/\s?[AP]\.?M\.?$/i, '')} ${item.title.replace(/^Free /, '').replace(/ Service$/, '')}`;
