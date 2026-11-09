@@ -5,11 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { brand, contentMaxWidth } from '../../constants/brand';
 import { useMediaConfig } from '../../constants/app-config/app-config-hooks';
-import { LatestVideo } from '../../constants/Service';
+import { Video } from '../../constants/video';
 import PillButton from '../shared/PillButton';
 import { Eyebrow } from '../shared/SectionHeader';
 
-type LatestSermonProps = { video: LatestVideo | null };
+type LatestSermonProps = { video: Video | null };
 
 export const LatestSermon = ({ video }: LatestSermonProps) => {
   const youtube = useMediaConfig().social_media.find((s) => s.platform === 'YOUTUBE');

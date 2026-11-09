@@ -15,7 +15,9 @@ import appConfig from '../constants/app-config/config.json';
 import { useHomeConfig } from '../constants/app-config/app-config-hooks';
 import { brand } from '../constants/brand';
 import { EVENT_FIELDS, EventType, UPCOMING_FILTER } from '../constants/Event';
-import { LatestVideo, Service } from '../constants/Service';
+import { Service } from '../constants/Service';
+import type { Video } from '../constants/video';
+import { getRecentVideos } from '../constants/youtube';
 import {
   getPrimaryService,
   getSundayMorning,
@@ -27,7 +29,7 @@ import { sanityFetch } from '../src/sanity/lib/client';
 type HomeProps = {
   services: Service[];
   events: EventType[];
-  latestVideo: LatestVideo | null;
+  latestVideo: Video | null;
 };
 
 /** "Our worship service is Sundays at 10:30 AM. Come early for free breakfast at 9:00 AM and Bible study at 9:30 AM." */
@@ -80,40 +82,6 @@ const Home = ({ services, events, latestVideo }: HomeProps) => {
   );
 };
 
-const decodeXml = (text: string) =>
-  text
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
-
-/**
- * Fetches the channel's newest video from YouTube's public RSS feed
- * (no API key or quota needed). Returns null if the request fails.
- */
-const fetchLatestVideo = async (): Promise<LatestVideo | null> => {
-  const { channel_id } = appConfig.organization.social_media.youtube;
-  try {
-    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${channel_id}`, {
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!res.ok) return null;
-    const xml = await res.text();
-    const entry = xml.match(/<entry>([\s\S]*?)<\/entry>/)?.[1];
-    const id = entry?.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1];
-    if (!entry || !id) return null;
-    return {
-      id,
-      title: decodeXml(entry.match(/<title>([^<]*)<\/title>/)?.[1] ?? 'Latest sermon'),
-      thumbnailUrl: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
-      publishedAt: entry.match(/<published>([^<]+)<\/published>/)?.[1] ?? '',
-    };
-  } catch {
-    return null;
-  }
-};
-
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const [services, events, latestVideo] = await Promise.all([
     sanityFetch<Service[]>({
@@ -129,7 +97,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       query: groq`*[${UPCOMING_FILTER}] | order(startDateTime asc)[0...3] { ${EVENT_FIELDS} }`,
       tags: ['events'],
     }),
-    fetchLatestVideo(),
+    getRecentVideos(1).then((videos) => videos[0] ?? null),
   ]);
 
   return {

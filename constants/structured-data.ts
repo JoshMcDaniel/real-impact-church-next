@@ -2,6 +2,7 @@ import appConfig from './app-config/config.json';
 import { absoluteUrl, siteUrl } from './site';
 import { FaqItem } from '../components/Home/PlanVisit';
 import { Event } from './Event';
+import type { Video } from './video';
 
 const org = appConfig.organization;
 
@@ -89,3 +90,24 @@ export const eventJsonLd = (event: Event) => {
     },
   };
 };
+
+/** schema.org VideoObject so sermons can appear in Google's video results. */
+export const videoJsonLd = (video: Video, pagePath: string) => ({
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: video.title,
+  description: video.description.trim() || `${video.title} — a sermon from ${org.full_name} in Eustis, Florida.`,
+  thumbnailUrl: [video.thumbnailUrl],
+  uploadDate: video.publishedAt,
+  ...(video.duration && { duration: video.duration }),
+  embedUrl: `https://www.youtube.com/embed/${video.id}`,
+  url: absoluteUrl(pagePath),
+  ...(video.viewCount != null && {
+    interactionStatistic: {
+      '@type': 'InteractionCounter',
+      interactionType: { '@type': 'WatchAction' },
+      userInteractionCount: video.viewCount,
+    },
+  }),
+  publisher: { '@type': 'Organization', name: org.full_name, url: absoluteUrl('/') },
+});

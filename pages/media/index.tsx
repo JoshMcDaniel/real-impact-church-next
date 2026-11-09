@@ -1,117 +1,117 @@
-import {
-  useMediaQuery,
-  Box,
-  Typography,
-  Divider,
-  useTheme,
-  Link,
-} from '@mui/material';
-import axios from 'axios';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React, { Fragment, useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined';
+import { GetStaticProps } from 'next';
 import DynamicHead from '../../components/DynamicHead/DynamicHead';
-import HorizontalScrollMedia from '../../components/Media/HorizontalScrollMedia';
-import MostRecentVideo from '../../components/Media/MostRecentVideo';
-import LoadingIndication from '../../components/shared/LoadingIndication';
-import {
-  useOrganizationConfig,
-  useMediaConfig,
-} from '../../constants/app-config/app-config-hooks';
+import LatestSermonFeature from '../../components/Media/LatestSermonFeature';
+import SubscribeCta from '../../components/Media/SubscribeCta';
+import PopularSermons from '../../components/Media/PopularSermons';
+import SermonCard from '../../components/Media/SermonCard';
+import PillButton from '../../components/shared/PillButton';
+import PillLabel from '../../components/shared/PillLabel';
+import PageHero from '../../components/shared/PageHero';
+import appConfig from '../../constants/app-config/config.json';
+import { useMediaConfig } from '../../constants/app-config/app-config-hooks';
+import { brand, contentMaxWidth } from '../../constants/brand';
+import { breadcrumbJsonLd } from '../../constants/structured-data';
+import { channelUrl, Video } from '../../constants/video';
+import { getPopularVideos, getRecentVideos } from '../../constants/youtube';
 
-export const Media: NextPage = () => {
-  const { api_url, channel_id } = useOrganizationConfig().social_media.youtube;
-  const mediaConfig = useMediaConfig();
-  const { most_recent, most_popular } = mediaConfig.media_page.youtube;
+type MediaProps = {
+  recent: Video[];
+  popular: Video[];
+  /** Latest sermon was posted in the last 8 days (decided at build time). */
+  latestIsNew: boolean;
+};
 
-  const isMediumView = useMediaQuery(useTheme().breakpoints.up('md'));
-  const activeRoute = useRouter().pathname;
+const gridSx = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, max(260px, calc((100% - 48px) / 3))), 1fr))',
+  gap: 3,
+};
 
-  const [recentRequestPending, setRecentRequestPending] =
-    useState<boolean>(false);
-  const [recentVideos, setRecentVideos] = useState<any[]>([]);
-
-  const [popularRequestPending, setPopularRequestPending] =
-    useState<boolean>(false);
-  const [popularVideos, setPopularVideos] = useState<any[]>([]);
-
-  const isRequestPending = (): boolean =>
-    recentRequestPending || popularRequestPending;
-
-  const channelUrl = `${api_url}${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&channelId=${channel_id}`;
-
-  const getVideosUrl = (order: 'date' | 'viewCount', count: number): string => {
-    return `${channelUrl}&order=${order}&part=snippet &type=video,id&maxResults=${count}`;
-  };
-
-  useEffect(() => {
-    if (!recentVideos.length) {
-      getMostRecentVideos();
-    }
-    if (!popularVideos.length) {
-      getMostPopularVideos();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const getMostRecentVideos = async (): Promise<void> => {
-    setRecentRequestPending(true);
-    const results = await axios.get(
-      getVideosUrl('date', most_recent.number_of_videos)
-    );
-    const videos = results.data?.items;
-    if (videos) {
-      setRecentVideos(videos);
-    }
-    setRecentRequestPending(false);
-  };
-
-  const getMostPopularVideos = async (): Promise<void> => {
-    setPopularRequestPending(true);
-    const results = await axios.get(
-      getVideosUrl('viewCount', most_popular.number_of_videos)
-    );
-    const videos = results.data?.items;
-    if (videos) {
-      setPopularVideos(videos);
-    }
-    setPopularRequestPending(false);
-  };
+export const Media = ({ recent, popular, latestIsNew }: MediaProps) => {
+  const { media_page } = useMediaConfig();
+  const [latest, ...more] = recent;
 
   return (
-    <Fragment>
+    <Box sx={{ backgroundColor: brand.paper, color: brand.text }}>
       <DynamicHead
-        title={mediaConfig.media_page.header.title}
-        description={mediaConfig.media_page.header.description}
+        fullTitle={media_page.header.title}
+        description={media_page.header.description}
+        image={latest?.thumbnailUrl ?? media_page.hero.image.path}
+        imageAlt={latest?.title ?? media_page.hero.image.description}
+        jsonLd={[breadcrumbJsonLd([{ name: 'Sermons & Media', path: '/media' }])]}
       />
-      <Box display="grid" gap="1rem" padding={isMediumView ? '2rem' : '1rem'}>
-        <Box>
-          <Typography variant="h4">Sermons</Typography>
-        </Box>
-        <Divider></Divider>
-        {isRequestPending() ? (
-          <LoadingIndication loadingText="Loading media..." />
+      <Box component="main">
+        <PageHero
+          eyebrow={media_page.hero.eyebrow}
+          title={media_page.hero.title}
+          text={media_page.hero.text}
+          image={media_page.hero.image}
+          overlay={0.62}
+        />
+
+        {latest ? (
+          <LatestSermonFeature video={latest} isNew={latestIsNew} />
         ) : (
-          <Fragment>
-            <Link
-              href={`${activeRoute}/${recentVideos[0]?.id?.videoId || '#'}`}
-              style={{ textDecoration: 'none' }}
-            >
-              <MostRecentVideo video={recentVideos[0]} />
-            </Link>
-            <Box width="100%" overflow="hidden">
-              <Typography variant="h4">Recent</Typography>
-              <HorizontalScrollMedia mediaItems={recentVideos.slice(1)} />
-            </Box>
-            <Box width="100%" overflow="hidden">
-              <Typography variant="h4">Popular</Typography>
-              <HorizontalScrollMedia mediaItems={popularVideos} />
-            </Box>
-          </Fragment>
+          <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', px: 3, py: 9 }}>
+            <Typography component="p" sx={{ m: 0, fontSize: 18 }}>
+              Sermons are temporarily unavailable here.{' '}
+              <Box component="a" href={channelUrl} sx={{ color: brand.red, fontWeight: 700 }}>
+                Watch them on our YouTube channel
+              </Box>
+              .
+            </Typography>
+          </Box>
         )}
+
+        {more.length > 0 && (
+          <Box
+            component="section"
+            aria-labelledby="recent-title"
+            sx={{ scrollMarginTop: '96px', maxWidth: contentMaxWidth, mx: 'auto', px: 3, pt: 6, pb: { xs: 8, md: 12.5 }, display: 'flex', flexDirection: 'column', gap: 4 }}
+          >
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '18px' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <PillLabel tone="dark">Recent sermons</PillLabel>
+                <Typography id="recent-title" component="h2" sx={{ m: 0, fontSize: 'clamp(30px, 3.4vw, 44px)', fontWeight: 800, color: brand.charcoal, lineHeight: 1.1, letterSpacing: '-0.01em' }}>
+                  Catch up on recent messages
+                </Typography>
+              </Box>
+              <PillButton href={channelUrl} tone="outline" startIcon={<SmartDisplayOutlinedIcon />}>
+                All videos on YouTube
+              </PillButton>
+            </Box>
+            <Box sx={gridSx}>
+              {more.map((video) => (
+                <SermonCard key={video.id} video={video} />
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        <PopularSermons videos={popular} />
+
+        <SubscribeCta videos={recent} />
       </Box>
-    </Fragment>
+    </Box>
   );
+};
+
+export const getStaticProps: GetStaticProps<MediaProps> = async () => {
+  const { recent_count, popular_count } = appConfig.website.media.media_page.youtube;
+  const [recent, popular] = await Promise.all([getRecentVideos(recent_count), getPopularVideos(popular_count)]);
+
+  return {
+    props: {
+      recent,
+      popular,
+      latestIsNew: !!recent[0]?.publishedAt && Date.now() - new Date(recent[0].publishedAt).getTime() < 8 * 24 * 60 * 60 * 1000,
+    },
+    // Hourly keeps the "popular" search (100 quota units) well under YouTube's daily limit.
+    revalidate: 3600,
+  };
 };
 
 export default Media;
