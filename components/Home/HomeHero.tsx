@@ -96,7 +96,7 @@ export const HomeHero = () => {
           <PillButton href={PLAN_VISIT_HREF} endIcon={<ArrowForwardIcon />}>
             Plan Your Visit
           </PillButton>
-          <PillButton href="/#sermons" tone="ghost" startIcon={<PlayCircleOutlineIcon />}>
+          <PillButton href="/media" tone="ghost" startIcon={<PlayCircleOutlineIcon />}>
             Watch Latest Sermon
           </PillButton>
         </Box>
